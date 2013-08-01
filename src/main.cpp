@@ -950,8 +950,6 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 	long seed = hex2long(cseed);
 	int rand = generateMTRandom(seed, 7200);
 
-	// printf(">>> nHeight = %d, Rand = %d\n", nHeight, rand);
-
 	if(rand > 5000 && rand < 5011)		
 	{
 		nSubsidy = 512 * COIN;
@@ -961,7 +959,7 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 		nSubsidy = 128 * COIN;
 	}
 	
-	if(nHeight < 3600)	// 1st 5 days double payout 
+	if(nHeight < 3600)	 
 	{
 		nSubsidy *= 2;
 	}
@@ -981,7 +979,6 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
 
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
-	// printf("nSubsidy=%"PRI64d", nCoinAge=%"PRI64d", nRewardCoinYear=%"PRI64d", \n", nSubsidy, nCoinAge, nRewardCoinYear);
 	if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
     return nSubsidy;
@@ -1050,10 +1047,6 @@ unsigned int static GetNextTargetRequired(const CBlockIndex* pindexLast, bool fP
     int64 nInterval = nTargetTimespan / nTargetSpacing;
     bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
     bnNew /= ((nInterval + 1) * nTargetSpacing);
-
-	// printf(">> nTargetSpacing = %"PRI64d", nTargetTimespan = %"PRI64d", nInterval = %"PRI64d"\n", nTargetSpacing, nTargetTimespan, nInterval);
-	// printf(">> nActualSpacing = %"PRI64d", bnNew = %s, bnTargetLimit = %s\n", nActualSpacing, bnNew.ToString().c_str(),
-	// 	bnTargetLimit.ToString().c_str());
 
     if (bnNew > bnTargetLimit)
         bnNew = bnTargetLimit;
@@ -1988,10 +1981,6 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
 {
     // These are checks that are independent of context
     // that can be verified before saving an orphan block.
-	/*	
-	if (GetHash() == uint256("0x000000017fa21bc0e77f173258bbff9150710f96f24bc0ba41d24a09b6c20fd8"))
-        return error("CheckBlock() block 712: hash == 000000017fa21bc0e77f173258bbff9150710f96f24bc0ba41d24a09b6c20fd8");
-	*/
 
     // Size limits
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
