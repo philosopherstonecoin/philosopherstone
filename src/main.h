@@ -36,7 +36,8 @@ static const int64 MIN_RELAY_TX_FEE = 0.1 * CENT;
 static const int64 MAX_MONEY = 2000000000 * COIN;
 static const int64 MAX_MINT_PROOF_OF_WORK = 64 * COIN;
 static const int64 MAX_MINT_PROOF_OF_WORK_LEGACY = 64 * COIN;
-static const int64 MAX_MINT_PROOF_OF_STAKE = 0.50 * MAX_MINT_PROOF_OF_WORK;	
+static const int64 MAX_MINT_PROOF_OF_STAKE = 0.50 * MAX_MINT_PROOF_OF_WORK;	// 50% annual interest
+static const unsigned int RWD_SWITCH_TIME = 1376006400;		// August 9, 2013 00:00:00 GMT
 
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
