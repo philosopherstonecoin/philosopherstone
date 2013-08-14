@@ -981,7 +981,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
 
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
-	if(GetAdjustedTime() > RWD_SWITCH_TIME)
+	if(nTime > RWD_SWITCH_TIME)
 		nSubsidy /= 64;
 
 	if (fDebug && GetBoolArg("-printcreation"))
