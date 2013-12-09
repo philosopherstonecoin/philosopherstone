@@ -9,7 +9,9 @@ Debian and Ubuntu
 
 First, make sure that you have the required repositories:
 open: Synaptic Package Manager > Settings > Other Software > Add...
-
+or
+Modify your source list using - nano /etc/apt/sources.list
+add
 ::
 
     deb http://cz.archive.ubuntu.com/ubuntu lucid main 
@@ -35,7 +37,7 @@ Do not manually update the following packages.
 ::
 
 
-    sudo apt-get install libssl-dev libdb4.8++-dev libdb4.8-dev libdb4.8++ libdb4.8
+    sudo apt-get install libssl-dev libdb4.8++-dev libdb4.8-dev libdb4.8++ libdb4.8 libqtwebkit-dev
 
 
 ::
