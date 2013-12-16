@@ -23,7 +23,8 @@ Philosopherstone is also long-term energy efficent due to the nature of Proof of
 
 Proof of Stake quickly overcame Proof of work blocks, and as such, total mined coins will be much less than original extimation of 8.891 million.
 
-To encourage accumulate initial stake, the first 5 days all the payout will be doubled.
+First 5 days all the payouts were doubled.
 
-Forum: https://bitcointalk.org/index.php?topic=292720.0
+Explorer: http://www.phsblocks.com/
+Forum: http://bitcointalk.org/index.php?topic=292720.0
 The official website is TBD
