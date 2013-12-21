@@ -1,7 +1,7 @@
-Philosopherstone - a fork of Diamond, with several algorithms fixed and improved. It is decendent of Novacoin/PPCoin with Pow/PoS. It combines the great features from Luckycoin (random blocks) and Florincoin (transaction message). 
+Philosopher Stones - a fork of Diamond, with several algorithms fixed and improved. It is decendent of Novacoin/PPCoin with Pow/PoS. It combines the great features from Luckycoin (random blocks) and Florincoin (transaction message). 
 
 
-Philosopherstone provides annual interest rate of 50%, for stakes that are not moved. This equivalent to 3.44% monthly interest. PoS blocks will be generated if the stake is held for more than 5 days. You will generally start to see interest payments around 5-10 days after deposit into your wallet.
+Philosopher Stones provide annual interest rate of 50%, for stakes that are not moved. This equivalent to 3.44% monthly interest. PoS blocks will be generated if the stake is held for more than 5 days. You will generally start to see interest payments around 5-10 days after deposit into your wallet.
 
 	- Each normal block has 64 Philosopherstone
 	- 2 minute block time
@@ -12,10 +12,11 @@ Philosopherstone provides annual interest rate of 50%, for stakes that are not m
 	- 50 confirmations for minted blocks
 	- Support transaction message
 	- No '0' value PoS blocks
+	- ASIC Resistence
 
 	- Random bonus blocks are (on average):
-		- 1 superblock every day of 512 Philosopherstones 
-		- 1 superblock every hour of 128 Philosopherstones (24 such blocks per day)
+		- 1 superblock every day of 512 Philosopherstones (1 in 720 Chance)
+		- 1 superblock every hour of 128 Philosopherstones (1 in 30 Chance)
 
 	- The default ports are 16281(Connect) and 16282(RPC).
 
@@ -26,5 +27,9 @@ Proof of Stake quickly overcame Proof of work blocks, and as such, total mined c
 First 5 days all the payouts were doubled.
 
 Explorer: http://www.phsblocks.com/
+
 Forum: http://bitcointalk.org/index.php?topic=292720.0
-The official website is TBD
+
+StoneStats: http://phstones.com/mobile.php
+
+The official website is TBA
