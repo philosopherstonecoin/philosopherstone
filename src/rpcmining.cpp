@@ -11,56 +11,6 @@
 using namespace json_spirit;
 using namespace std;
 
-Value getgenerate(const Array& params, bool fHelp)
-{
-    if (fHelp || params.size() != 0)
-        throw runtime_error(
-            "getgenerate\n"
-            "Returns true or false.");
-
-    return GetBoolArg("-gen");
-}
-
-
-Value setgenerate(const Array& params, bool fHelp)
-{
-    if (fHelp || params.size() < 1 || params.size() > 2)
-        throw runtime_error(
-            "setgenerate <generate> [genproclimit]\n"
-            "<generate> is true or false to turn generation on or off.\n"
-            "Generation is limited to [genproclimit] processors, -1 is unlimited.");
-
-    bool fGenerate = true;
-    if (params.size() > 0)
-        fGenerate = params[0].get_bool();
-
-    if (params.size() > 1)
-    {
-        int nGenProcLimit = params[1].get_int();
-        mapArgs["-genproclimit"] = itostr(nGenProcLimit);
-        if (nGenProcLimit == 0)
-            fGenerate = false;
-    }
-    mapArgs["-gen"] = (fGenerate ? "1" : "0");
-
-    GenerateBitcoins(fGenerate, pwalletMain);
-    return Value::null;
-}
-
-
-Value gethashespersec(const Array& params, bool fHelp)
-{
-    if (fHelp || params.size() != 0)
-        throw runtime_error(
-            "gethashespersec\n"
-            "Returns a recent hashes per second performance measurement while generating.");
-
-    if (GetTimeMillis() - nHPSTimerStart > 8000)
-        return (boost::int64_t)0;
-    return (boost::int64_t)dHashesPerSec;
-}
-
-
 Value getmininginfo(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
@@ -68,22 +18,50 @@ Value getmininginfo(const Array& params, bool fHelp)
             "getmininginfo\n"
             "Returns an object containing mining-related information.");
 
+    int64 nTargetSpacingWorkMin = 2;
+    int64 nTargetSpacingWork = nTargetSpacingWorkMin;
+    int64 nPoWInterval = 15;
+    int64 nTargetSpacingStake = 120;
+
+    CBlockIndex* pindex = pindexGenesisBlock;
+    CBlockIndex* pindexPrevWork = pindexGenesisBlock;
+
+    while (pindex)
+    {
+        if (pindex->IsProofOfWork())
+        {
+            int64 nActualSpacingWork = pindex->GetBlockTime() - pindexPrevWork->GetBlockTime();
+            nTargetSpacingWork = ((nPoWInterval - 1) * nTargetSpacingWork + nActualSpacingWork + nActualSpacingWork) / (nPoWInterval + 1);
+            nTargetSpacingWork = max(nTargetSpacingWork, nTargetSpacingWorkMin);
+            pindexPrevWork = pindex;
+        }
+
+        pindex = pindex->pnext;
+    }
+    
+    double dNetworkMhps = GetDifficulty() * 4294.967296 / nTargetSpacingWork;
+    int nNetworkWeight = GetDifficulty(GetLastBlockIndex(pindexBest, true)) * 4294967296 / nTargetSpacingStake;
+   
     Object obj;
-    obj.push_back(Pair("blocks",        (int)nBestHeight));
+    obj.push_back(Pair("blocks", (int)nBestHeight));
     obj.push_back(Pair("currentblocksize",(uint64_t)nLastBlockSize));
     obj.push_back(Pair("currentblocktx",(uint64_t)nLastBlockTx));
-    obj.push_back(Pair("difficulty",    (double)GetDifficulty()));
-    obj.push_back(Pair("errors",        GetWarnings("statusbar")));
-    obj.push_back(Pair("generate",      GetBoolArg("-gen")));
-    obj.push_back(Pair("genproclimit",  (int)GetArg("-genproclimit", -1)));
-    obj.push_back(Pair("hashespersec",  gethashespersec(params, false)));
-	obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
-    obj.push_back(Pair("pooledtx",      (uint64_t)mempool.size()));
-    obj.push_back(Pair("testnet",       fTestNet));
+    obj.push_back(Pair("difficulty", (double)GetDifficulty()));
+    obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
+    obj.push_back(Pair("POWmhashps", dNetworkMhps));
+    obj.push_back(Pair("netstakeweight", (uint64_t) nNetworkWeight));
+    obj.push_back(Pair("errors", GetWarnings("statusbar")));
+    obj.push_back(Pair("pooledtx", (uint64_t)mempool.size()));
+    obj.push_back(Pair("belowweight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_BELOWMIN)));
+    obj.push_back(Pair("minimumweight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_MINWEIGHT)));
+    obj.push_back(Pair("maximumweight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_MAXWEIGHT)));
+    obj.push_back(Pair("totalweight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_NORMAL)));
+    obj.push_back(Pair("stakeinterest", (uint64_t)GetProofOfStakeReward(0, GetLastBlockIndex(pindexBest, true)->nBits, GetLastBlockIndex(pindexBest, true)->nTime)));
+    obj.push_back(Pair("testnet", fTestNet));
     return obj;
 }
 
-// Litecoin: Return average network hashes per second based on last number of blocks.
+// Stones: Return average network hashes per second based on last number of blocks.
 Value GetNetworkHashPS(int lookup) {
     if (pindexBest == NULL)
         return 0;

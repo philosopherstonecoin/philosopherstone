@@ -35,6 +35,14 @@ enum WalletFeature
     FEATURE_LATEST = 60000
 };
 
+/** Stake weight calculation mode */
+enum StakeWeightMode
+{
+    STAKE_NORMAL = 0, // Over 5 days
+    STAKE_MAXWEIGHT = 1, // at max 15 days
+    STAKE_MINWEIGHT = 3, // between >5 and <15 days
+    STAKE_BELOWMIN = 4 // Under 5days
+};
 
 /** A key pool entry */
 class CKeyPool
@@ -177,8 +185,9 @@ public:
     bool CreateTransaction(const std::vector<std::pair<CScript, int64> >& vecSend, CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, std::string strTxComment);
     bool CreateTransaction(CScript scriptPubKey, int64 nValue, CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, std::string strTxComment);
     bool CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey);
+	uint64 GetStakeMintPower(const CKeyStore& keystore, enum StakeWeightMode mode=STAKE_NORMAL);
     bool CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64 nSearchInterval, CTransaction& txNew);
-    std::string SendMoney(CScript scriptPubKey, int64 nValue, CWalletTx& wtxNew, bool fAskFee=false, std::string strTxComment = "");
+	std::string SendMoney(CScript scriptPubKey, int64 nValue, CWalletTx& wtxNew, bool fAskFee=false, std::string strTxComment = "");
     std::string SendMoneyToDestination(const CTxDestination &address, int64 nValue, CWalletTx& wtxNew, bool fAskFee=false, std::string strTxComment = "");
 
     bool NewKeyPool();
