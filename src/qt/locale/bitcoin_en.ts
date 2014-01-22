@@ -6,18 +6,18 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About BottleCaps</source>
-        <translation>About BottleCaps</translation>
+        <source>About Philosopherstone</source>
+        <translation>About Philosopherstone</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;BottleCaps&lt;/b&gt; version</source>
-        <translation>&lt;b&gt;BottleCaps&lt;/b&gt; version</translation>
+        <source>&lt;b&gt;Philosopherstone&lt;/b&gt; version</source>
+        <translation>&lt;b&gt;Philosopherstone&lt;/b&gt; version</translation>
     </message>
     <message>
         <location line="+41"/>
-        <source>Copyright © 2009-2012 The BottleCaps developers</source>
-        <translation>Copyright © 2009-2012 The BottleCaps developers</translation>
+        <source>Copyright © 2009-2012 The Philosopherstone developers</source>
+        <translation>Copyright © 2009-2012 The Philosopherstone developers</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -64,8 +64,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your BottleCaps addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>These are your BottleCaps addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</translation>
+        <source>These are your Philosopherstone addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>These are your Philosopherstone addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -79,8 +79,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a BottleCaps address</source>
-        <translation>Sign a message to prove you own a BottleCaps address</translation>
+        <source>Sign a message to prove you own a Philosopherstone address</source>
+        <translation>Sign a message to prove you own a Philosopherstone address</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -94,8 +94,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified BottleCaps address</source>
-        <translation>Verify a message to ensure it was signed with a specified BottleCaps address</translation>
+        <source>Verify a message to ensure it was signed with a specified Philosopherstone address</source>
+        <translation>Verify a message to ensure it was signed with a specified Philosopherstone address</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -225,8 +225,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
-        <translation>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR STONES&lt;/b&gt;!</source>
+        <translation>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR STONES&lt;/b&gt;!</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -252,8 +252,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-56"/>
-        <source>BottleCaps will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
-        <translation>BottleCaps will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</translation>
+        <source>Philosopherstone will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your stones from being stolen by malware infecting your computer.</source>
+        <translation>Philosopherstone will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your stones from being stolen by malware infecting your computer.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -298,7 +298,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
 </context>
 <context>
-    <name>BitcoinGUI</name>
+    <name>bitcoingui</name>
     <message>
         <location filename="../bitcoingui.cpp" line="+257"/>
         <source>Sign &amp;message...</source>
@@ -341,8 +341,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-13"/>
-        <source>&amp;Receive coins</source>
-        <translation>&amp;Receive coins</translation>
+        <source>&amp;Receive stones</source>
+        <translation>&amp;Receive stones</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -351,8 +351,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-7"/>
-        <source>&amp;Send coins</source>
-        <translation>&amp;Send coins</translation>
+        <source>&amp;Send stones</source>
+        <translation>&amp;Send stones</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -366,8 +366,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about BottleCaps</source>
-        <translation>Show information about BottleCaps</translation>
+        <source>Show information about Philosopherstone</source>
+        <translation>Show information about Philosopherstone</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -419,13 +419,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>Send coins to a BottleCaps address</source>
-        <translation>Send coins to a BottleCaps address</translation>
+        <source>Send stones to a Philosopherstone address</source>
+        <translation>Send stones to a Philosopherstone address</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for BottleCaps</source>
-        <translation>Modify configuration options for BottleCaps</translation>
+        <source>Modify configuration options for Philosopherstone</source>
+        <translation>Modify configuration options for Philosopherstone</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -464,8 +464,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-186"/>
-        <source>BottleCaps</source>
-        <translation>BottleCaps</translation>
+        <source>Philosopherstone</source>
+        <translation>Philosopherstone</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -474,8 +474,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+168"/>
-        <source>&amp;About BottleCaps</source>
-        <translation>&amp;About BottleCaps</translation>
+        <source>&amp;About Philosopherstone</source>
+        <translation>&amp;About Philosopherstone</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -516,15 +516,15 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>BottleCaps client</source>
-        <translation>BottleCaps client</translation>
+        <source>Philosopherstone client</source>
+        <translation>Philosopherstone client</translation>
     </message>
     <message numerus="yes">
         <location line="+69"/>
-        <source>%n active connection(s) to BottleCaps network</source>
+        <source>%n active connection(s) to Philosopherstone network</source>
         <translation>
-            <numerusform>%n active connection to BottleCaps network</numerusform>
-            <numerusform>%n active connections to BottleCaps network</numerusform>
+            <numerusform>%n active connection to Philosopherstone network</numerusform>
+            <numerusform>%n active connections to Philosopherstone network</numerusform>
         </translation>
     </message>
     <message>
@@ -621,8 +621,8 @@ Address: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid BottleCaps address or malformed URI parameters.</source>
-        <translation>URI can not be parsed! This can be caused by an invalid BottleCaps address or malformed URI parameters.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid Philosopherstone address or malformed URI parameters.</source>
+        <translation>URI can not be parsed! This can be caused by an invalid Philosopherstone address or malformed URI parameters.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -656,8 +656,8 @@ Address: %4
     </message>
     <message>
         <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. BottleCaps can no longer continue safely and will quit.</source>
-        <translation>A fatal error occurred. BottleCaps can no longer continue safely and will quit.</translation>
+        <source>A fatal error occurred. Philosopherstone can no longer continue safely and will quit.</source>
+        <translation>A fatal error occurred. Philosopherstone can no longer continue safely and will quit.</translation>
     </message>
 </context>
 <context>
@@ -722,8 +722,8 @@ Address: %4
     </message>
     <message>
         <location line="+5"/>
-        <source>The entered address &quot;%1&quot; is not a valid BottleCaps address.</source>
-        <translation>The entered address &quot;%1&quot; is not a valid BottleCaps address.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid Philosopherstone address.</source>
+        <translation>The entered address &quot;%1&quot; is not a valid Philosopherstone address.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -741,8 +741,8 @@ Address: %4
     <message>
         <location filename="../guiutil.cpp" line="+419"/>
         <location line="+12"/>
-        <source>BottleCaps-Qt</source>
-        <translation>BottleCaps-Qt</translation>
+        <source>Philosopherstone-Qt</source>
+        <translation>Philosopherstone-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -804,13 +804,13 @@ Address: %4
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start BottleCaps after logging in to the system.</source>
-        <translation>Automatically start BottleCaps after logging in to the system.</translation>
+        <source>Automatically start Philosopherstone after logging in to the system.</source>
+        <translation>Automatically start Philosopherstone after logging in to the system.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start BottleCaps on system login</source>
-        <translation>&amp;Start BottleCaps on system login</translation>
+        <source>&amp;Start Philosopherstone on system login</source>
+        <translation>&amp;Start Philosopherstone on system login</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -829,8 +829,8 @@ Address: %4
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the BottleCaps client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automatically open the BottleCaps client port on the router. This only works when your router supports UPnP and it is enabled.</translation>
+        <source>Automatically open the Philosopherstone client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Automatically open the Philosopherstone client port on the router. This only works when your router supports UPnP and it is enabled.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -839,8 +839,8 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the BottleCaps network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Connect to the BottleCaps network through a SOCKS proxy (e.g. when connecting through Tor).</translation>
+        <source>Connect to the Philosopherstone network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Connect to the Philosopherstone network through a SOCKS proxy (e.g. when connecting through Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -914,8 +914,8 @@ Address: %4
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting BottleCaps.</source>
-        <translation>The user interface language can be set here. This setting will take effect after restarting BottleCaps.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Philosopherstone.</source>
+        <translation>The user interface language can be set here. This setting will take effect after restarting Philosopherstone.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -924,13 +924,13 @@ Address: %4
     </message>
     <message>
         <location line="+13"/>
-        <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation>Choose the default subdivision unit to show in the interface and when sending coins.</translation>
+        <source>Choose the default subdivision unit to show in the interface and when sending stones.</source>
+        <translation>Choose the default subdivision unit to show in the interface and when sending stones.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show BottleCaps addresses in the transaction list or not.</source>
-        <translation>Whether to show BottleCaps addresses in the transaction list or not.</translation>
+        <source>Whether to show Philosopherstone addresses in the transaction list or not.</source>
+        <translation>Whether to show Philosopherstone addresses in the transaction list or not.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -966,8 +966,8 @@ Address: %4
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting BottleCaps.</source>
-        <translation>This setting will take effect after restarting BottleCaps.</translation>
+        <source>This setting will take effect after restarting Philosopherstone.</source>
+        <translation>This setting will take effect after restarting Philosopherstone.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -985,8 +985,8 @@ Address: %4
     <message>
         <location line="+33"/>
         <location line="+183"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the BottleCaps network after a connection is established, but this process has not completed yet.</source>
-        <translation>The displayed information may be out of date. Your wallet automatically synchronizes with the BottleCaps network after a connection is established, but this process has not completed yet.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Philosopherstone network after a connection is established, but this process has not completed yet.</source>
+        <translation>The displayed information may be out of date. Your wallet automatically synchronizes with the Philosopherstone network after a connection is established, but this process has not completed yet.</translation>
     </message>
     <message>
         <location line="-141"/>
@@ -1040,8 +1040,8 @@ Address: %4
     </message>
     <message>
         <location line="+134"/>
-        <source>Total of coins that was staked, and do not yet count toward the current balance</source>
-        <translation>Total of coins that was staked, and do not yet count toward the current balance</translation>
+        <source>Total of stones that was staked, and do not yet count toward the current balance</source>
+        <translation>Total of stones that was staked, and do not yet count toward the current balance</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -1201,8 +1201,8 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the BottleCaps-Qt help message to get a list with possible BottleCaps command-line options.</source>
-        <translation>Show the BottleCaps-Qt help message to get a list with possible BottleCaps command-line options.</translation>
+        <source>Show the Philosopherstone-Qt help message to get a list with possible Philosopherstone command-line options.</source>
+        <translation>Show the Philosopherstone-Qt help message to get a list with possible Philosopherstone command-line options.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1221,13 +1221,13 @@ Address: %4
     </message>
     <message>
         <location line="-104"/>
-        <source>BottleCaps - Debug window</source>
-        <translation>BottleCaps - Debug window</translation>
+        <source>Philosopherstone - Debug window</source>
+        <translation>Philosopherstone - Debug window</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>BottleCaps Core</source>
-        <translation>BottleCaps Core</translation>
+        <source>Philosopherstone Core</source>
+        <translation>Philosopherstone Core</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1236,8 +1236,8 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the BottleCaps debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Open the BottleCaps debug log file from the current data directory. This can take a few seconds for large log files.</translation>
+        <source>Open the Philosopherstone debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Open the Philosopherstone debug log file from the current data directory. This can take a few seconds for large log files.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1246,8 +1246,8 @@ Address: %4
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the BottleCaps RPC console.</source>
-        <translation>Welcome to the BottleCaps RPC console.</translation>
+        <source>Welcome to the Philosopherstone RPC console.</source>
+        <translation>Welcome to the Philosopherstone RPC console.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1271,8 +1271,8 @@ Address: %4
         <location line="+6"/>
         <location line="+5"/>
         <location line="+5"/>
-        <source>Send Coins</source>
-        <translation>Send Coins</translation>
+        <source>Send stones</source>
+        <translation>Send stones</translation>
     </message>
     <message>
         <location line="+50"/>
@@ -1321,8 +1321,8 @@ Address: %4
     </message>
     <message>
         <location line="+5"/>
-        <source>Confirm send coins</source>
-        <translation>Confirm send coins</translation>
+        <source>Confirm send stones</source>
+        <translation>Confirm send stones</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1366,8 +1366,8 @@ Address: %4
     </message>
     <message>
         <location line="+5"/>
-        <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</translation>
+        <source>Error: The transaction was rejected. This might happen if some of the stones in your wallet were already spent, such as if you used a copy of wallet.dat and stones were spent in the copy but not marked as spent here.</source>
+        <translation>Error: The transaction was rejected. This might happen if some of the stones in your wallet were already spent, such as if you used a copy of wallet.dat and stones were spent in the copy but not marked as spent here.</translation>
     </message>
 </context>
 <context>
@@ -1430,8 +1430,8 @@ Address: %4
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a valid BottleCaps address</source>
-        <translation>Enter a valid BottleCaps address </translation>
+        <source>Enter a valid Philosopherstone address</source>
+        <translation>Enter a valid Philosopherstone address </translation>
     </message>
 </context>
 <context>
@@ -1491,8 +1491,8 @@ Address: %4
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this BottleCaps address</source>
-        <translation>Sign the message to prove you own this BottleCaps address</translation>
+        <source>Sign the message to prove you own this Philosopherstone address</source>
+        <translation>Sign the message to prove you own this Philosopherstone address</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -1523,8 +1523,8 @@ Address: %4
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified BottleCaps address</source>
-        <translation>Verify the message to ensure it was signed with the specified BottleCaps address</translation>
+        <source>Verify the message to ensure it was signed with the specified Philosopherstone address</source>
+        <translation>Verify the message to ensure it was signed with the specified Philosopherstone address</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -1534,8 +1534,8 @@ Address: %4
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a valid BottleCaps address</source>
-        <translation>Enter a valid BottleCaps address</translation>
+        <source>Enter a valid Philosopherstone address</source>
+        <translation>Enter a valid Philosopherstone address</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -1544,8 +1544,8 @@ Address: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter BottleCaps signature</source>
-        <translation>Enter BottleCaps signature</translation>
+        <source>Enter Philosopherstone signature</source>
+        <translation>Enter Philosopherstone signature</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -1753,13 +1753,13 @@ Address: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Generated coins must mature 520 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Generated coins must mature 520 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</translation>
+        <source>Generated stones must mature 50 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Generated stones must mature 50 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>Staked coins must wait 520 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \"not accepted\" and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</source>
-        <translation>Staked coins must wait 520 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \"not accepted\" and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</translation>
+        <source>Staked stones must wait 50 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \"not accepted\" and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</source>
+        <translation>Staked stones must wait 50 blocks before they can return to balance and be spent.  When you generated this proof-of-stake block, it was broadcast to the network to be added to the block chain.  If it fails to get into the chain, it will change to \"not accepted\" and not be a valid stake.  This may occasionally happen if another node generates a proof-of-stake block within a few seconds of yours.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2029,6 +2029,11 @@ Address: %4
     </message>
     <message>
         <location line="+1"/>
+        <source>Copy transaction ID</source>
+        <translation>Copy transaction ID</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Edit label</source>
         <translation>Edit label</translation>
     </message>
@@ -2115,8 +2120,8 @@ Address: %4
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+82"/>
-        <source>BottleCaps version</source>
-        <translation>BottleCaps version</translation>
+        <source>Philosopherstone version</source>
+        <translation>Philosopherstone version</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2125,8 +2130,8 @@ Address: %4
     </message>
     <message>
         <location line="-25"/>
-        <source>Send command to -server or bitcoind</source>
-        <translation>Send command to -server or bitcoind</translation>
+        <source>Send command to -server or Philosopherstoned</source>
+        <translation>Send command to -server or Philosopherstoned</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -2145,23 +2150,13 @@ Address: %4
     </message>
     <message>
         <location line="+23"/>
-        <source>Specify configuration file (default: BottleCaps.conf)</source>
-        <translation>Specify configuration file (default: BottleCaps.conf)</translation>
+        <source>Specify configuration file (default: Philosopherstone.conf)</source>
+        <translation>Specify configuration file (default: Philosopherstone.conf)</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Specify pid file (default: BottleCapsd.pid)</source>
-        <translation>Specify pid file (default: BottleCapsd.pid)</translation>
-    </message>
-    <message>
-        <location line="-47"/>
-        <source>Generate coins</source>
-        <translation>Generate coins</translation>
-    </message>
-    <message>
-        <location line="-14"/>
-        <source>Don&apos;t generate coins</source>
-        <translation>Don&apos;t generate coins</translation>
+        <source>Specify pid file (default: stoned.pid)</source>
+        <translation>Specify pid file (default: stoned.pid)</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -2225,7 +2220,7 @@ Address: %4
     </message>
     <message>
         <location line="+5"/>
-        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <source>Error: The transaction was rejected.  This might happen if some of the stones in your wallet were already spent, such as if you used a copy of wallet.dat and stones were spent in the copy but not marked as spent here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2305,8 +2300,8 @@ Address: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BottleCaps will not work properly.</source>
-        <translation>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong BottleCaps will not work properly.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Philosopherstone will not work properly.</source>
+        <translation>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Philosopherstone will not work properly.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2385,8 +2380,8 @@ Address: %4
     </message>
     <message>
         <location line="+4"/>
-        <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
-        <translation>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</translation>
+        <source>SSL options: (see the Philosopherstone Wiki for SSL setup instructions)</source>
+        <translation>SSL options: (see the Philosopherstone Wiki for SSL setup instructions)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2540,13 +2535,13 @@ Address: %4
     </message>
     <message>
         <location line="-131"/>
-        <source>Cannot obtain a lock on data directory %s.  BottleCaps is probably already running.</source>
-        <translation>Cannot obtain a lock on data directory %s.  BottleCaps is probably already running.</translation>
+        <source>Cannot obtain a lock on data directory %s.  Philosopherstone is probably already running.</source>
+        <translation>Cannot obtain a lock on data directory %s.  Philosopherstone is probably already running.</translation>
     </message>
     <message>
         <location line="+57"/>
-        <source>BottleCaps</source>
-        <translation>BottleCaps</translation>
+        <source>Philosopherstone</source>
+        <translation>Philosopherstone</translation>
     </message>
     <message>
         <location line="+77"/>
@@ -2580,13 +2575,13 @@ Address: %4
     </message>
     <message>
         <location line="+1"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of BottleCaps</source>
-        <translation>Error loading wallet.dat: Wallet requires newer version of BottleCaps</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Philosopherstone</source>
+        <translation>Error loading wallet.dat: Wallet requires newer version of Philosopherstone</translation>
     </message>
     <message>
         <location line="+73"/>
-        <source>Wallet needed to be rewritten: restart BottleCaps to complete</source>
-        <translation>Wallet needed to be rewritten: restart BottleCaps to complete</translation>
+        <source>Wallet needed to be rewritten: restart Philosopherstone to complete</source>
+        <translation>Wallet needed to be rewritten: restart Philosopherstone to complete</translation>
     </message>
     <message>
         <location line="-75"/>
@@ -2655,8 +2650,8 @@ Address: %4
     </message>
     <message>
         <location line="-25"/>
-        <source>Unable to bind to %s on this computer. BottleCaps is probably already running.</source>
-        <translation>Unable to bind to %s on this computer. BottleCaps is probably already running.</translation>
+        <source>Unable to bind to %s on this computer. Philosopherstone is probably already running.</source>
+        <translation>Unable to bind to %s on this computer. Philosopherstone is probably already running.</translation>
     </message>
     <message>
         <location line="+55"/>
@@ -2708,7 +2703,7 @@ Address: %4
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=stonerpc
 rpcpassword=%s
 (you do not need to remember this password)
 If the file does not exist, create it with owner-readable-only file permissions.
@@ -2716,7 +2711,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=stonerpc
 rpcpassword=%s
 (you do not need to remember this password)
 If the file does not exist, create it with owner-readable-only file permissions.
