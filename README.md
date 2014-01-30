@@ -1,30 +1,29 @@
-Philosopher Stones - a fork of Diamond, with several algorithms fixed and improved. It is descendent of Novacoin/PPCoin with Pow/PoS. It combines the great features from Luckycoin (random blocks) and Florincoin (transaction message). 
+PhilosopherStone (PHS) - PoS/PoW hybrid. Stones make more stones!
 
+A descendent of Novacoin/PPCoin with hybrid Pow/PoS Stone generation (energy efficient).  
 
-Philosopher Stones provide annual interest rate of 50%, for stakes that are not moved. This equivalent to 3.44% monthly interest. PoS blocks will be generated if the stake is held for more than 5 days. You will generally start to see interest payments around 5-10 days after deposit into your wallet.
+Philosopher Stones provide an annual interest rate of 50%. This equivalent to 3.44% monthly interest. PoS blocks will be generated if the Stones are held for more than 5-10 days. No special hardware needed
 
-	- Each normal block has 64 Philosopherstones
-	- 2 minute block time
-	- Difficulty retargets every block 
-	- Mining payout will be halved every 3 months (every 64800 blocks)
-	- Expected total mined coins will be <much less than> 8,891,840 Philosopherstones
-	- 6 confirmations for transaction
-	- 50 confirmations for minted blocks
-	- Support transaction message
-	- No '0' value PoS blocks
-	- ASIC Resistance
+Other specifications:
 
-	- Random bonus blocks are (based on current reward):
-		- 1 Superblock every day of 256 Philosopherstones (1 in 720 Chance)
-		- 1 Doubleblock every hour of 64 Philosopherstones (1 in 30 Chance)
+   - Transaction fee destruction to benefit miners/stake holders. Increased # transactions = increased stone destruction
+   - Each normal block has 64/32/(16) Philosopherstone
+   - 2 minute block time
+   - Difficulty re-targets every block
+   - Mining payout will be halved every 3 months (or every 64800 blocks) (has happened twice)
+   - Expected total mined coins will be 8,891,840 Philosopherstones (Much less due to PoS overtaking PoW)
+   - 6 confirmations for transactions
+   - 50 confirmations for minted blocks
+   - Transaction messaging
+   - Proof of Stake hybrid - Stones will mine themselves every 5-15 days
+   - no need to spend tons of electricity, just run client once every week, sync and stake!
 
-	- The default ports are 16281(Connect) and 16282(RPC).
+- Random bonus blocks (on average, at current rewards):
+- 1 Super-block of 128 Philosopherstones every day (1 in 720 chance)
+- 1 Double-block of 16 Philosopherstones every hour (24 per day)
+- When getting super-blocks, different images will displayed, see them below.
 
-Philosopherstone is also long-term energy efficient due to the nature of Proof of Stake slowly overtaking Proof of Work mining.
-
-Proof of Stake quickly overcame Proof of work blocks, and as such, total mined coins will be much less than original estimations of 8.891 million.
-
-First 5 days all the payouts were doubled.
+   - The default ports are 16281(Connect) and 16282(RPC).
 
 Explorer: http://www.phsblocks.com/
 
