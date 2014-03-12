@@ -21,6 +21,7 @@ LIBPATHS= \
 
 USE_UPNP:=1
 USE_IPV6:=1
+USE_LEVELDB:=1
 
 LIBS= -dead_strip
 
@@ -119,7 +120,22 @@ ifneq (${USE_IPV6}, -)
 	DEFS += -DUSE_IPV6=$(USE_IPV6)
 endif
 
-all: philosopherstoned
+all: stoned
+
+#
+# LevelDB support
+#
+ifdef USE_LEVELDB
+LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/include) -DUSE_LEVELDB
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
+OBJS += obj/txdb-leveldb.o
+leveldb/libleveldb.a:
+  @echo "Building LevelDB ..."; cd leveldb; make; cd ..
+obj/txdb-leveldb.o: leveldb/libleveldb.a
+else
+OBJS += obj/txdb-bdb.o
+endif
 
 test check: test_philosopherstone FORCE
 	./test_philosopherstone
@@ -146,7 +162,7 @@ obj/scrypt-x86.o: scrypt-x86.S
 obj/scrypt-x86_64.o: scrypt-x86_64.S
 	$(CXX) -c $(xCXXFLAGS) -MMD -o $@ $<
 
-philosopherstoned: $(OBJS:obj/%=obj/%)
+stoned: $(OBJS:obj/%=obj/%)
 	$(CXX) $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -162,7 +178,7 @@ test_philosopherstone: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	$(CXX) $(CFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS) $(TESTLIBS)
 
 clean:
-	-rm -f philosopherstoned test_philosopherstone
+	-rm -f stoned test_philosopherstone
 	-rm -f obj/*.o
 	-rm -f obj-test/*.o
 	-rm -f obj/*.P

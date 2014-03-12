@@ -4,27 +4,29 @@
 
 USE_UPNP:=0
 USE_IPV6:=1
+USE_LEVELDB:=1
 
 INCLUDEPATHS= \
- -I"C:\boost_1_53_0" \
- -I"C:\db-4.8.30.NC\build_unix" \
- -I"C:\openssl-1.0.1e/include" 
+ -I"C:\boost-1.50.0-mgw" \
+ -I"C:\db-4.8.30.NC-mgw\build_unix" \
+ -I"C:\openssl-1.0.1c-mgw\include"
 
 LIBPATHS= \
- -L"C:\boost_1_53_0\stage\lib" \
- -L"C:\db-4.8.30.NC\build_unix" \
- -L"C:\openssl-1.0.1e" 
+ -L"C:\boost-1.50.0-mgw\stage\lib" \
+ -L"C:\db-4.8.30.NC-mgw\build_unix" \
+ -L"C:\openssl-1.0.1c-mgw"
 
 LIBS= \
- -l boost_system-mgw45-mt-d-1_53 \
- -l boost_filesystem-mgw45-mt-d-1_53 \
- -l boost_program_options-mgw45-mt-d-1_53 \
- -l boost_thread-mgw45-mt-d-1_53 \
+ -l boost_system-mgw44-mt-1_53 \
+ -l boost_filesystem-mgw44-mt-1_53 \
+ -l boost_program_options-mgw44-mt-1_53 \
+ -l boost_thread-mgw44-mt-1_53 \
+ -l boost_chrono-mgw44-mt-1_53 \
  -l db_cxx \
  -l ssl \
  -l crypto
 
-DEFS=-DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE -D__NO_SYSTEM_INCLUDES
+DEFS=-D_MT -DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFESAFE
 DEBUGFLAGS=-g
 CFLAGS=-mthreads -O2 -msse2 -w -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter $(DEBUGFLAGS) $(DEFS) $(INCLUDEPATHS)
 LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat
@@ -35,6 +37,8 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
+ INCLUDEPATHS += -I"C:\miniupnpc-1.6-mgw"
+ LIBPATHS += -L"C:\miniupnpc-1.6-mgw"
  LIBS += -l miniupnpc -l iphlpapi
  DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
@@ -43,7 +47,7 @@ ifneq (${USE_IPV6}, -)
 	DEFS += -DUSE_IPV6=$(USE_IPV6)
 endif
 
-LIBS += -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l winmm -l shell32 -l comctl32 -l ole32 -l oleaut32 -l uuid -l rpcrt4 -l advapi32 -l ws2_32 -l mswsock -l shlwapi
+LIBS += -l mingwthrd -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l winmm -l shell32 -l comctl32 -l ole32 -l oleaut32 -l uuid -l rpcrt4 -l advapi32 -l ws2_32 -l mswsock -l shlwapi
 
 # TODO: make the mingw builds smarter about dependencies, like the linux/osx builds are
 HEADERS = $(wildcard *.h)
@@ -83,6 +87,21 @@ OBJS= \
     obj/scrypt-x86_64.o
 
 all: stoned.exe
+
+#
+# LevelDB support
+#
+ifneq (${USE_LEVELDB}, -)
+LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/include) -DUSE_LEVELDB
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
+OBJS += obj/txdb-leveldb.o
+leveldb/libleveldb.a:
+  cd leveldb; make; cd ..
+obj/txdb-leveldb.o: leveldb/libleveldb.lib
+else
+OBJS += obj/txdb-bdb.o
+endif
 
 test check: test_philosopherstone.exe FORCE
 	test_philosopherstone.exe
