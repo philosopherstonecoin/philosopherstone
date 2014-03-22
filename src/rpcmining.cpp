@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "db.h"
+#include "txdb.h"
 #include "init.h"
 #include "bitcoinrpc.h"
 
@@ -18,13 +19,13 @@ Value getmininginfo(const Array& params, bool fHelp)
             "getmininginfo\n"
             "Returns an object containing mining-related information.");
 
-    int64 nTargetSpacingWorkMin = 2;
-    int64 nTargetSpacingWork = nTargetSpacingWorkMin;
-    int64 nPoWInterval = 15;
-    int64 nTargetSpacingStake = 120;
+    double dStakeKernelsTriedAvg = 0;
+    int nPoWInterval = 72, nPoSInterval = 72, nStakesHandled = 0, nStakesTime = 0;
+    int64 nTargetSpacingWorkMin = 2, nTargetSpacingWork = 2;
 
     CBlockIndex* pindex = pindexGenesisBlock;
     CBlockIndex* pindexPrevWork = pindexGenesisBlock;
+    CBlockIndex* pindexPrevStake = NULL;
 
     while (pindex)
     {
@@ -38,26 +39,43 @@ Value getmininginfo(const Array& params, bool fHelp)
 
         pindex = pindex->pnext;
     }
-    
+
+
+    pindex = pindexBest;
+
+    while (pindex && nStakesHandled < nPoSInterval)
+    {
+        if (pindex->IsProofOfStake())
+        {
+            dStakeKernelsTriedAvg += GetDifficulty(pindex) * 4294967296;
+            nStakesTime += pindexPrevStake ? (pindexPrevStake->nTime - pindex->nTime) : 0;
+            pindexPrevStake = pindex;
+            nStakesHandled++;
+        }
+
+        pindex = pindex->pprev;
+    }
+
     double dNetworkMhps = GetDifficulty() * 4294.967296 / nTargetSpacingWork;
-    int nNetworkWeight = GetDifficulty(GetLastBlockIndex(pindexBest, true)) * 4294967296 / nTargetSpacingStake;
-   
+    double dNetworkWeight = dStakeKernelsTriedAvg / nStakesTime;
+
     Object obj;
     obj.push_back(Pair("blocks", (int)nBestHeight));
     obj.push_back(Pair("currentblocksize",(uint64_t)nLastBlockSize));
     obj.push_back(Pair("currentblocktx",(uint64_t)nLastBlockTx));
     obj.push_back(Pair("difficulty", (double)GetDifficulty()));
     obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
-    obj.push_back(Pair("PoWmhashps", dNetworkMhps));
-    obj.push_back(Pair("netstake", (uint64_t) nNetworkWeight));
+    //obj.push_back(Pair("blockvalue", (uint64_t)GetProofOfWorkReward(GetLastBlockIndex(pindexBest, false)->nBits)));
+    //obj.push_back(Pair("powmhashps", dNetworkMhps));
+    obj.push_back(Pair("netstakeweight", dNetworkWeight));
     obj.push_back(Pair("errors", GetWarnings("statusbar")));
     obj.push_back(Pair("pooledtx", (uint64_t)mempool.size()));
-    obj.push_back(Pair("BelowWeight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_BELOWMIN)));
-    obj.push_back(Pair("MinWeight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_MINWEIGHT)));
-    obj.push_back(Pair("MaxWeight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_MAXWEIGHT)));
-    obj.push_back(Pair("TotalWeight", (uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_NORMAL)));
-    obj.push_back(Pair("StakeReadyStones", ((uint64_t)pwalletMain->GetStakeMintPower(*pwalletMain, STAKE_NORMAL))/730));
-    obj.push_back(Pair("stakeinterest", (uint64_t)GetProofOfStakeReward(0, GetLastBlockIndex(pindexBest, true)->nBits, GetLastBlockIndex(pindexBest, true)->nTime)));
+    obj.push_back(Pair("belowweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN)));
+    obj.push_back(Pair("stakeweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL)));
+    obj.push_back(Pair("minweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_MINWEIGHT)));
+    obj.push_back(Pair("maxweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_MAXWEIGHT)));
+    obj.push_back(Pair("StakeReadyStones", ((uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL))/730));
+    //obj.push_back(Pair("stakeinterest", (uint64_t)GetProofOfStakeReward(0, GetLastBlockIndex(pindexBest, true)->nBits, GetLastBlockIndex(pindexBest, true)->nTime, true)));
     obj.push_back(Pair("testnet", fTestNet));
     return obj;
 }

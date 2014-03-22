@@ -91,7 +91,7 @@
         <cursorShape>IBeamCursor</cursorShape>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2009-2012 Bitcoin Developers&lt;br/&gt;Copyright © 2012 PPCoin Developers&lt;br/&gt;Copyright © 2013 NovaCoin Developers &lt;br/&gt;Copyright © 2013-2014 Philosopherstone Developers &lt;a href=&quot;https://www.cryptsy.com/users/register?refid=8564&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://www.cryptsy.com/users/register?refid=8564&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;Click Here to Trade PHS on Cryptsy! &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2009-2012 Bitcoin Developers&lt;br/&gt;Copyright © 2012 PPCoin Developers&lt;br/&gt;Copyright © 2013 NovaCoin Developers &lt;br/&gt;Copyright © 2013-2014 Philosopherstone Developers &lt;a href=&quot;https://www.cryptsy.com/users/register?refid=8564&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://www.cryptsy.com/users/register?refid=8564&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;Trade PHS on Cryptsy&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="textFormat">
         <enum>Qt::RichText</enum>
