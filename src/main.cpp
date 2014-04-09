@@ -1467,6 +1467,9 @@ bool CBlock::DisconnectBlock(CTxDB& txdb, CBlockIndex* pindex)
 
 bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 {
+// Temp for halving fork issue
+    if (GetHash() == uint256("0xde7e198bb7a9de8fc28858e0a3537abef9c0803289764fcca67ded94ee7eba15"))
+        return error("CheckBlock() :195035 hash == de7e198bb7a9de8fc28858e0a3537abef9c0803289764fcca67ded94ee7eba15");
     // Check it again in case a previous version let a bad block in
     if (!CheckBlock(!fJustCheck, !fJustCheck))
         return false;
