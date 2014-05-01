@@ -46,8 +46,8 @@
         <file alias="staking_on">res/icons/staking_on.png</file>
     </qresource>
     <qresource prefix="/images">
-        <file alias="about">res/images/about.png</file>
-        <file alias="splash">res/images/philosopherstone-splash.png</file>
+        <file alias="about">res/images/about.jpg</file>
+        <file alias="splash">res/images/philosopherstone-splash.gif</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="update_spinner">res/movies/update_spinner.mng</file>
