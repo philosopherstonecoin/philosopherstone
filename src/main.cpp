@@ -45,6 +45,7 @@ static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 unsigned int nStakeMinAge = 60 * 60 * 24 * 5;	// minimum age for coin age: 5d
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 15;	// stake age of full weight: 15d
 unsigned int nStakeTargetSpacing = 120;			// 2-minute block spacing
+unsigned int nStakeTargetSpacingNEW = 200;
 
 int64 nChainStartTime = 1374911180;
 int nCoinbaseMaturity = 30;
@@ -988,7 +989,8 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 }
 
 static const int64 nTargetTimespan = 30 * 120;  // 60 mins
-static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; 
+static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing;
+static const int64 nTargetSpacingWorkMaxNEW = 12 * nStakeTargetSpacingNEW;
 
 //
 // minimum amount of work that could possibly be required nTime after
@@ -1026,7 +1028,6 @@ unsigned int static GetNextTargetRequiredV1(const CBlockIndex* pindexLast, bool 
 
     if(fProofOfStake)
     {
-        // Proof-of-Stake blocks has own target limit since nVersion=3 supermajority on mainNet and always on testNet
         bnTargetLimit = bnProofOfStakeLimit;
     }
 
@@ -1042,8 +1043,6 @@ unsigned int static GetNextTargetRequiredV1(const CBlockIndex* pindexLast, bool 
 
     int64 nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
 
-    // ppcoin: target change every block
-    // ppcoin: retarget with exponential moving toward target spacing
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
     int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
@@ -1063,7 +1062,6 @@ unsigned int static GetNextTargetRequiredV2(const CBlockIndex* pindexLast, bool 
 
     if(fProofOfStake)
     {
-        // Proof-of-Stake blocks has own target limit since nVersion=3 supermajority on mainNet and always on testNet
         bnTargetLimit = bnProofOfStakeLimit;
     }
 
@@ -1081,8 +1079,6 @@ unsigned int static GetNextTargetRequiredV2(const CBlockIndex* pindexLast, bool 
     if (nActualSpacing < 0)
         nActualSpacing = nStakeTargetSpacing;
 
-    // ppcoin: target change every block
-    // ppcoin: retarget with exponential moving toward target spacing
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
     int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
@@ -1096,13 +1092,50 @@ unsigned int static GetNextTargetRequiredV2(const CBlockIndex* pindexLast, bool 
     return bnNew.GetCompact();
 }
 
+unsigned int static GetNextTargetRequiredV3(const CBlockIndex* pindexLast, bool fProofOfStake)
+{
+    CBigNum bnTargetLimit = bnProofOfWorkLimit;
+
+    if(fProofOfStake)
+    {
+        bnTargetLimit = bnProofOfStakeLimit;
+    }
+
+    if (pindexLast == NULL)
+        return bnTargetLimit.GetCompact(); // genesis block
+
+    const CBlockIndex* pindexPrev = GetLastBlockIndex(pindexLast, fProofOfStake);
+    if (pindexPrev->pprev == NULL)
+        return bnTargetLimit.GetCompact(); // first block
+    const CBlockIndex* pindexPrevPrev = GetLastBlockIndex(pindexPrev->pprev, fProofOfStake);
+    if (pindexPrevPrev->pprev == NULL)
+        return bnTargetLimit.GetCompact(); // second block
+
+    int64 nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
+    if (nActualSpacing < 0)
+        nActualSpacing = nStakeTargetSpacing;
+
+    CBigNum bnNew;
+    bnNew.SetCompact(pindexPrev->nBits);
+	int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacingNEW : min(nTargetSpacingWorkMaxNEW, (int64) nStakeTargetSpacingNEW * (1 + pindexLast->nHeight - pindexPrev->nHeight));
+    int64 nInterval = nTargetTimespan / nTargetSpacing;
+    bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
+    bnNew /= ((nInterval + 1) * nTargetSpacing);
+
+    if (bnNew > bnTargetLimit)
+        bnNew = bnTargetLimit;
+
+    return bnNew.GetCompact();
+}
+
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
     if (pindexLast->nHeight < 213500)
-
         return GetNextTargetRequiredV1(pindexLast, fProofOfStake);
-    else
+    else if (pindexLast->nHeight >= 213500 && pindexLast->nHeight < 224100)
         return GetNextTargetRequiredV2(pindexLast, fProofOfStake);
+	else
+        return GetNextTargetRequiredV3(pindexLast, fProofOfStake);
 }
 
 bool CheckProofOfWork(uint256 hash, unsigned int nBits)
@@ -2134,7 +2167,10 @@ bool CBlock::AcceptBlock()
         return DoS(10, error("AcceptBlock() : prev block not found"));
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
-
+	
+    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
+        return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
+		
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
         return DoS(100, error("AcceptBlock() : incorrect %s", IsProofOfWork() ? "proof-of-work" : "proof-of-stake"));
@@ -2524,11 +2560,11 @@ bool LoadBlockIndex(bool fAllowNew)
 
         bnProofOfStakeLimit = bnProofOfStakeLimitTestNet; // 0x00000fff PoS base target is fixed in testnet
         bnProofOfWorkLimit = bnProofOfWorkLimitTestNet; // 0x0000ffff PoW base target is fixed in testnet
-        nStakeMinAge = 20 * 60; // test net min age is 20 min
-        nStakeMaxAge = 60 * 60; // test net min age is 60 min
+        nStakeMinAge = 10 * 60; // testnet min age 10 min
+        nStakeMaxAge = 60 * 60; // testnet min age 60 min
 		nModifierInterval = 60; // test modifier interval is 2 minutes
         nCoinbaseMaturity = 10; // test maturity is 10 blocks
-        nStakeTargetSpacing = 3 * 60; // test block spacing is 3 minutes
+        nStakeTargetSpacing = 60; // testnet spacing 1 minute
     }
 
     //

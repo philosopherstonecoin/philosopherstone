@@ -32,7 +32,7 @@
         <file alias="remove">res/icons/remove.png</file>
         <file alias="tx_mined">res/icons/tx_mined.png</file>
         <file alias="tx_mined2">res/icons/tx_mined2.png</file>        
-	   <file alias="tx_mined3">res/icons/tx_mined3.png</file>
+        <file alias="tx_mined3">res/icons/tx_mined3.png</file>
         <file alias="tx_input">res/icons/tx_input.png</file>
         <file alias="tx_output">res/icons/tx_output.png</file>
         <file alias="tx_inout">res/icons/tx_inout.png</file>
@@ -44,6 +44,7 @@
         <file alias="debugwindow">res/icons/debugwindow.png</file>
         <file alias="staking_off">res/icons/staking_off.png</file>
         <file alias="staking_on">res/icons/staking_on.png</file>
+        <file alias="walletlogo">res/icons/phsblue.gif</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.jpg</file>

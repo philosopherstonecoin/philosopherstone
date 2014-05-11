@@ -36,6 +36,7 @@ namespace Checkpoints
         (207787, uint256("0x000000004ee6661c0880d3ea5d0489dfa1f2fab5d4e7b0a82eabc73a47791d8f"))
         (213532, uint256("0x79729b7386869072c0527fd1d8b7e20f925f2122590e0ca3a27240c59bd574e1")) //after retarget hardfork
         (217095, uint256("0x0000000005cd3848842c87b916627d4bf8e5fe2db9bde684b851bfd00b25209d"))
+        (221889, uint256("0x0000000003f18f1093e27c5dbc9a89ca76c8208f323cd844d352e7e89f07efac"))
 	;
 
     static MapCheckpoints mapCheckpointsTestnet =
