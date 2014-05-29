@@ -63,8 +63,8 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("blocks", (int)nBestHeight));
     obj.push_back(Pair("currentblocksize",(uint64_t)nLastBlockSize));
     obj.push_back(Pair("currentblocktx",(uint64_t)nLastBlockTx));
-    obj.push_back(Pair("difficulty", (double)GetDifficulty()));
-    obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
+    //obj.push_back(Pair("difficulty", (double)GetDifficulty()));
+    //obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
     //obj.push_back(Pair("blockvalue", (uint64_t)GetProofOfWorkReward(GetLastBlockIndex(pindexBest, false)->nBits)));
     //obj.push_back(Pair("powmhashps", dNetworkMhps));
     obj.push_back(Pair("netstakeweight", dNetworkWeight));
@@ -72,8 +72,8 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("pooledtx", (uint64_t)mempool.size()));
     obj.push_back(Pair("belowweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN)));
     obj.push_back(Pair("stakeweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL)));
-    obj.push_back(Pair("minweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_MINWEIGHT)));
-    obj.push_back(Pair("maxweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_MAXWEIGHT)));
+    //obj.push_back(Pair("minweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_MINWEIGHT)));
+    //obj.push_back(Pair("maxweight", (uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_MAXWEIGHT)));
     obj.push_back(Pair("StakeReadyStones", ((uint64_t)pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL))/730));
     //obj.push_back(Pair("stakeinterest", (uint64_t)GetProofOfStakeReward(0, GetLastBlockIndex(pindexBest, true)->nBits, GetLastBlockIndex(pindexBest, true)->nTime, true)));
     obj.push_back(Pair("testnet", fTestNet));
