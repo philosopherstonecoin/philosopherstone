@@ -1,5 +1,18 @@
-Bitcoin-qt: Qt4 GUI for Bitcoin
-===============================
+Philosopher Stones BETA
+
+Copyright (c) 2013-2014 Philosopher Stones Developers
+Copyright (c) 2013 NovaCoin Developers
+Copyright (c) 2011-2013 PPCoin Developers
+Distributed under the MIT/X11 software license, see the accompanying
+file license.txt or http://www.opensource.org/licenses/mit-license.php.
+This product includes software developed by the OpenSSL Project for use in
+the OpenSSL Toolkit (http://www.openssl.org/).  This product includes
+cryptographic software written by Eric Young (eay@cryptsoft.com).
+
+Philosopher Stones is a free open source project derived from PPCoin/NovaCoin, with
+the goal of providing a long-term energy-efficient crypto-currency.
+Built on the foundation of Bitcoin, innovations such as proof-of-stake
+help further advance the field of crypto-currency.
 
 Build instructions
 ===================
@@ -127,8 +140,6 @@ To use UPnP for port forwarding behind a NAT router (recommended, as more connec
 ::
 
     qmake "USE_UPNP=1"
-
-(in **Qt Creator**, you can find the setting for additional qmake arguments under "Projects" -> "Build Settings" -> "Build Steps", then click "Details" next to **qmake**)
 
 This requires miniupnpc for UPnP port mapping.  It can be downloaded from
 http://miniupnp.tuxfamily.org/files/.  UPnP support is not compiled in by default.
