@@ -1439,18 +1439,6 @@ uint64 CWallet::GetStakeWeight(const CKeyStore& keystore, enum StakeWeightMode m
                 if (nTime + nStakeMinAge > GetTime())
                     continue;
             break;
-            case STAKE_MAXWEIGHT:
-                // Do not count input that is still less than 15 days old
-                if (nTime + nStakeMaxAge > GetTime())
-                    continue;
-            break;
-            case STAKE_MINWEIGHT:
-                // Count only inputs with suitable age (from 5 to 15 days old)
-                if (nTime + nStakeMaxAge < GetTime())
-                    continue;
-                if (nTime + nStakeMinAge > GetTime())
-                    continue;
-            break;
             case STAKE_BELOWMIN:
                 // Below 5 days
                 if (pcoin.first->nTime + nStakeMinAge < GetTime())
