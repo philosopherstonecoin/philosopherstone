@@ -7,10 +7,9 @@ Stones will generate if held and not moved for 10-15 days.
    - Data Port: 16281 (17281 Testnet)
    - RPC Port: 16282 (17282 Testnet)
    - Transaction fee destruction
-   - 2 minute block time
    - 6/50 confirmations for transactions/new mint
    - Messaging
-   - Proof of Stake only Switch after initial distribution
+   - Proof of Stake only Switch after 10 month initial distribution (complete)
 
 Stone Stats: http://phstones.com/mobile.php
 

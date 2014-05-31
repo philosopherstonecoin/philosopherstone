@@ -26,6 +26,7 @@ using namespace boost;
 
 CWallet* pwalletMain;
 CClientUIInterface uiInterface;
+unsigned int nNodeLifespan;
 bool fUseFastIndex;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -349,6 +350,7 @@ bool AppInit2()
 #endif
 
     // ********************************************************* Step 2: parameter interactions
+    nNodeLifespan = GetArg("-addrlifespan", 7);
     fUseFastIndex = GetBoolArg("-fastindex", true);
     fTestNet = GetBoolArg("-testnet");
     if (fTestNet) {

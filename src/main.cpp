@@ -3414,12 +3414,15 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
 
     else if (strCommand == "getaddr")
-    {
+     {
+        // Don't return addresses older than nCutOff timestamp
+        int64 nCutOff = GetTime() - (nNodeLifespan * 24 * 60 * 60);
         pfrom->vAddrToSend.clear();
         vector<CAddress> vAddr = addrman.GetAddr();
         BOOST_FOREACH(const CAddress &addr, vAddr)
-            pfrom->PushAddress(addr);
-    }
+            if(addr.nTime > nCutOff)
+                pfrom->PushAddress(addr);
+     }
 
 
     else if (strCommand == "mempool")
