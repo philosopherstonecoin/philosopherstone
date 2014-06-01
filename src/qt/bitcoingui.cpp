@@ -26,6 +26,7 @@
 #include "guiutil.h"
 #include "rpcconsole.h"
 #include "wallet.h"
+#include "ui_interface.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -95,7 +96,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     // Create the toolbars
     createToolBars();
 
-    // Create the tray icon (or setup the dock icon)
+    // Create system tray icon and notification
     createTrayIcon();
 
     // Create tabs
@@ -188,6 +189,9 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     connect(addressBookPage, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
     // Clicking on "Sign Message" in the receive coins page sends you to the sign message tab
     connect(receiveCoinsPage, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
+	
+    // Install event filter to be able to catch status tip events (QEvent::StatusTip)
+    this->installEventFilter(this);
 
     gotoOverviewPage();
 }
@@ -274,6 +278,11 @@ void BitcoinGUI::createActions()
     lockWalletAction->setStatusTip(tr("Lock the wallet"));
     lockWalletAction->setCheckable(true);
 	
+    checkWalletAction = new QAction(QIcon(":/icons/transaction_confirmed"), tr("&Check Wallet..."), this);
+    checkWalletAction->setStatusTip(tr("Check wallet integrity and report findings"));
+    repairWalletAction = new QAction(QIcon(":/icons/options"), tr("&Repair Wallet..."), this);
+    repairWalletAction->setStatusTip(tr("Fix wallet integrity and remove orphans"));
+	
     signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
     verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
 
@@ -288,6 +297,8 @@ void BitcoinGUI::createActions()
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(optionsClicked()));
     connect(toggleHideAction, SIGNAL(triggered()), this, SLOT(toggleHidden()));
     connect(encryptWalletAction, SIGNAL(triggered(bool)), this, SLOT(encryptWallet(bool)));
+    connect(checkWalletAction, SIGNAL(triggered()), this, SLOT(checkWallet()));
+    connect(repairWalletAction, SIGNAL(triggered()), this, SLOT(repairWallet()));
     connect(backupWalletAction, SIGNAL(triggered()), this, SLOT(backupWallet()));
     connect(changePassphraseAction, SIGNAL(triggered()), this, SLOT(changePassphrase()));
     connect(unlockWalletAction, SIGNAL(triggered()), this, SLOT(unlockWallet()));
@@ -323,6 +334,9 @@ void BitcoinGUI::createMenuBar()
     wallet->addAction(changePassphraseAction);
     wallet->addAction(unlockWalletAction);
     wallet->addAction(lockWalletAction);
+    wallet->addSeparator();
+    wallet->addAction(checkWalletAction);
+    wallet->addAction(repairWalletAction);
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
     help->addAction(openRPCConsoleAction);
@@ -371,6 +385,12 @@ void BitcoinGUI::setClientModel(ClientModel *clientModel)
             aboutAction->setIcon(QIcon(":/icons/toolbar_testnet"));
         }
 
+    // Create system tray menu (or setup the dock menu) that late to prevent users from calling actions,
+    // while the client has not yet fully loaded
+
+    if(trayIcon)
+        createTrayIconMenu();
+
         // Keep up to date with client
         setNumConnections(clientModel->getNumConnections());
         connect(clientModel, SIGNAL(numConnectionsChanged(int)), this, SLOT(setNumConnections(int)));
@@ -379,9 +399,10 @@ void BitcoinGUI::setClientModel(ClientModel *clientModel)
         connect(clientModel, SIGNAL(numBlocksChanged(int,int)), this, SLOT(setNumBlocks(int,int)));
 
         // Report errors from network/worker thread
-        connect(clientModel, SIGNAL(error(QString,QString,bool)), this, SLOT(error(QString,QString,bool)));
+        connect(clientModel, SIGNAL(message(QString,QString,unsigned int)), this, SLOT(message(QString,QString,unsigned int)));
 
         rpcConsole->setClientModel(clientModel);
+        overviewPage->setClientModel(clientModel);
         addressBookPage->setOptionsModel(clientModel->getOptionsModel());
         receiveCoinsPage->setOptionsModel(clientModel->getOptionsModel());
     }
@@ -393,12 +414,12 @@ void BitcoinGUI::setWalletModel(WalletModel *walletModel)
     if(walletModel)
     {
         // Report errors from wallet thread
-        connect(walletModel, SIGNAL(error(QString,QString,bool)), this, SLOT(error(QString,QString,bool)));
+        connect(walletModel, SIGNAL(message(QString,QString,unsigned int)), this, SLOT(message(QString,QString,unsigned int)));
 
         // Put transaction list in tabs
         transactionView->setModel(walletModel);
 
-        overviewPage->setModel(walletModel);
+        overviewPage->setWalletModel(walletModel);
         addressBookPage->setModel(walletModel->getAddressTableModel());
         receiveCoinsPage->setModel(walletModel->getAddressTableModel());
         sendCoinsPage->setModel(walletModel);
@@ -418,16 +439,27 @@ void BitcoinGUI::setWalletModel(WalletModel *walletModel)
 
 void BitcoinGUI::createTrayIcon()
 {
-    QMenu *trayIconMenu;
+
 #ifndef Q_OS_MAC
     trayIcon = new QSystemTrayIcon(this);
-    trayIconMenu = new QMenu(this);
-    trayIcon->setContextMenu(trayIconMenu);
+
     trayIcon->setToolTip(tr("Philosopherstone client"));
     trayIcon->setIcon(QIcon(":/icons/toolbar"));
+    trayIcon->show();
+#endif
+
+    notificator = new Notificator(qApp->applicationName(), trayIcon);
+}
+
+
+void BitcoinGUI::createTrayIconMenu()
+{
+    QMenu *trayIconMenu;
+#ifndef Q_OS_MAC
+    trayIconMenu = new QMenu(this);
+    trayIcon->setContextMenu(trayIconMenu);
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
-    trayIcon->show();
 #else
     // Note: On Mac, the dock icon is used to provide the tray's functionality.
     MacDockIconHandler *dockIconHandler = MacDockIconHandler::instance();
@@ -449,8 +481,6 @@ void BitcoinGUI::createTrayIcon()
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
 #endif
-
-    notificator = new Notificator(qApp->applicationName(), trayIcon);
 }
 
 #ifndef Q_OS_MAC
@@ -506,7 +536,6 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
         return;
     }
 
-    QString strStatusBarWarnings = clientModel->getStatusBarWarnings();
     QString tooltip;
 
     if(count < nTotalBlocks)
@@ -514,33 +543,21 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
         int nRemainingBlocks = nTotalBlocks - count;
         float nPercentageDone = count / (nTotalBlocks * 0.01f);
 
-        if (strStatusBarWarnings.isEmpty())
-        {
-            progressBarLabel->setText(tr("Synchronizing with network..."));
-            progressBarLabel->setVisible(true);
-            progressBar->setFormat(tr("~%n block(s) remaining", "", nRemainingBlocks));
-            progressBar->setMaximum(nTotalBlocks);
-            progressBar->setValue(count);
-            progressBar->setVisible(true);
-        }
+        progressBarLabel->setText(tr("Synchronizing with network..."));
+        progressBarLabel->setVisible(true);
+        progressBar->setFormat(tr("~%n block(s) remaining", "", nRemainingBlocks));
+        progressBar->setMaximum(nTotalBlocks);
+        progressBar->setValue(count);
+        progressBar->setVisible(true);
 
         tooltip = tr("Downloaded %1 of %2 blocks of transaction history (%3% done).").arg(count).arg(nTotalBlocks).arg(nPercentageDone, 0, 'f', 2);
     }
     else
     {
-        if (strStatusBarWarnings.isEmpty())
-            progressBarLabel->setVisible(false);
+        progressBarLabel->setVisible(false);
 
         progressBar->setVisible(false);
         tooltip = tr("Downloaded %1 blocks of transaction history.").arg(count);
-    }
-
-    // Override progressBarLabel text and hide progress bar, when we have warnings to display
-    if (!strStatusBarWarnings.isEmpty())
-    {
-        progressBarLabel->setText(strStatusBarWarnings);
-        progressBarLabel->setVisible(true);
-        progressBar->setVisible(false);
     }
 
 	tooltip = tr("Current Stake difficulty is %1.").arg(clientModel->GetDifficulty()) + QString("<br>") + tooltip;
@@ -602,17 +619,51 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     progressBar->setToolTip(tooltip);
 }
 
-void BitcoinGUI::error(const QString &title, const QString &message, bool modal)
+void BitcoinGUI::message(const QString &title, const QString &message, unsigned int style)
 {
-    // Report errors from network/worker thread
-    if(modal)
-    {
-        QMessageBox::critical(this, title, message, QMessageBox::Ok, QMessageBox::Ok);
-    } else {
-        notificator->notify(Notificator::Critical, title, message);
-    }
-}
+  QString strTitle = tr("Philosopherstone") + " - ";
+  // Default to information icon
+  int nMBoxIcon = QMessageBox::Information;
+  int nNotifyIcon = Notificator::Information;
 
+  // Check for usage of predefined title
+  switch (style) {
+  case CClientUIInterface::MSG_ERROR:
+      strTitle += tr("Error");
+      break;
+  case CClientUIInterface::MSG_WARNING:
+      strTitle += tr("Warning");
+      break;
+  case CClientUIInterface::MSG_INFORMATION:
+      strTitle += tr("Information");
+      break;
+  default:
+      strTitle += title; // Use supplied title
+  }
+
+  // Check for error/warning icon
+  if (style & CClientUIInterface::ICON_ERROR) {
+      nMBoxIcon = QMessageBox::Critical;
+      nNotifyIcon = Notificator::Critical;
+  }
+  else if (style & CClientUIInterface::ICON_WARNING) {
+      nMBoxIcon = QMessageBox::Warning;
+      nNotifyIcon = Notificator::Warning;
+  }
+
+  // Display message
+  if (style & CClientUIInterface::MODAL) {
+      // Check for buttons, use OK as default, if none was supplied
+      QMessageBox::StandardButton buttons;
+      if (!(buttons = (QMessageBox::StandardButton)(style & CClientUIInterface::BTN_MASK)))
+          buttons = QMessageBox::Ok;
+
+      QMessageBox mBox((QMessageBox::Icon)nMBoxIcon, strTitle, message, buttons);
+      mBox.exec();
+  }
+  else
+      notificator->notify((Notificator::Class)nNotifyIcon, strTitle, message);
+}
 void BitcoinGUI::changeEvent(QEvent *e)
 {
     QMainWindow::changeEvent(e);
@@ -681,17 +732,15 @@ void BitcoinGUI::incomingTransaction(const QModelIndex & parent, int start, int 
                             TransactionTableModel::ToAddress, parent)
                         .data(Qt::DecorationRole));
 
-        notificator->notify(Notificator::Information,
-                            (amount)<0 ? tr("Sent transaction") :
-                                         tr("Incoming transaction"),
-                              tr("Date: %1\n"
-                                 "Amount: %2\n"
-                                 "Type: %3\n"
-                                 "Address: %4\n")
-                              .arg(date)
-                              .arg(BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), amount, true))
-                              .arg(type)
-                              .arg(address), icon);
+        message((amount)<0 ? tr("Sent transaction") : tr("Incoming transaction"),
+           tr("Date: %1\n"
+              "Amount: %2\n"
+              "Type: %3\n"
+              "Address: %4\n")
+                .arg(date)
+                .arg(BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), amount, true))
+                .arg(type)
+                .arg(address), CClientUIInterface::MSG_INFORMATION);
     }
 }
 
@@ -784,7 +833,8 @@ void BitcoinGUI::dropEvent(QDropEvent *event)
         if (nValidUrisFound)
             gotoSendCoinsPage();
         else
-            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid Philosopherstone address or malformed URI parameters."));
+            message(tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid Philosopherstone address or malformed URI parameters."),
+                    CClientUIInterface::ICON_WARNING);
     }
 
     event->acceptProposedAction();
@@ -799,7 +849,20 @@ void BitcoinGUI::handleURI(QString strURI)
         gotoSendCoinsPage();
     }
     else
-        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid Philosopherstone address or malformed URI parameters."));
+        message(tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid Philosopherstone address or malformed URI parameters."),
+                 CClientUIInterface::ICON_WARNING);
+}
+
+bool BitcoinGUI::eventFilter(QObject *object, QEvent *event)
+{
+    // Catch status tip events
+    if (event->type() == QEvent::StatusTip)
+    {
+        // Prevent adding text from setStatusTip(), if we currently use the status bar for displaying other stuff
+        if (progressBarLabel->isVisible() && progressBar->isVisible())
+            return true;
+    }
+    return QMainWindow::eventFilter(object, event);
 }
 
 void BitcoinGUI::setEncryptionStatus(int status)
@@ -853,6 +916,65 @@ void BitcoinGUI::encryptWallet(bool status)
     dlg.exec();
 
     setEncryptionStatus(walletModel->getEncryptionStatus());
+}
+void BitcoinGUI::checkWallet()
+{
+
+    int nMismatchSpent;
+    int64 nBalanceInQuestion;
+    int nOrphansFound;
+
+    if(!walletModel)
+        return;
+
+    // Check the wallet as requested by user
+    walletModel->checkWallet(nMismatchSpent, nBalanceInQuestion, nOrphansFound);
+
+    if (nMismatchSpent == 0 && nOrphansFound == 0)
+        message(tr("Check Wallet Information"),
+                tr("Wallet passed integrity test!\n"
+                   "Nothing found to fix.")
+                  ,CClientUIInterface::MSG_INFORMATION);
+  else
+       message(tr("Check Wallet Information"),
+               tr("Wallet failed integrity test!\n\n"
+                  "Mismatched coin(s) found: %1.\n"
+                  "Amount in question: %2.\n"
+                  "Orphans found: %3.\n\n"
+                  "Please backup wallet and run repair wallet.\n")
+                        .arg(nMismatchSpent)
+                        .arg(BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), nBalanceInQuestion,true))
+                        .arg(nOrphansFound)
+                 ,CClientUIInterface::MSG_WARNING); 
+}
+
+void BitcoinGUI::repairWallet()
+{
+    int nMismatchSpent;
+    int64 nBalanceInQuestion;
+    int nOrphansFound;
+
+    if(!walletModel)
+        return;
+
+    // Repair the wallet as requested by user
+    walletModel->repairWallet(nMismatchSpent, nBalanceInQuestion, nOrphansFound);
+
+    if (nMismatchSpent == 0 && nOrphansFound == 0)
+       message(tr("Repair Wallet Information"),
+               tr("Wallet passed integrity test!\n"
+                  "Nothing found to fix.")
+                ,CClientUIInterface::MSG_INFORMATION);
+    else
+       message(tr("Repair Wallet Information"),
+               tr("Wallet failed integrity test and has been repaired!\n"
+                  "Mismatched coin(s) found: %1\n"
+                  "Amount affected by repair: %2\n"
+                  "Orphans removed: %3\n")
+                        .arg(nMismatchSpent)
+                        .arg(BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), nBalanceInQuestion,true))
+                        .arg(nOrphansFound)
+                  ,CClientUIInterface::MSG_WARNING); 
 }
 
 void BitcoinGUI::backupWallet()

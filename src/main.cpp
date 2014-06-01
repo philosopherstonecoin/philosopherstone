@@ -2797,6 +2797,9 @@ string GetWarnings(string strFor)
     if (GetBoolArg("-testsafemode"))
         strRPC = "test";
 
+    if (!CLIENT_VERSION_IS_RELEASE)
+        strStatusBar = _("Test Build - use at your own risk");
+
     // ppcoin: wallet lock warning for minting
     if (strMintWarning != "")
     {

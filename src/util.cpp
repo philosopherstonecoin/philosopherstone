@@ -1299,7 +1299,7 @@ void AddTimeData(const CNetAddr& ip, int64 nTime)
                     string strMessage = _("Warning: Please check that your computer's date and time are correct! If your clock is wrong Philosopherstone will not work properly.");
                     strMiscWarning = strMessage;
                     printf("*** %s\n", strMessage.c_str());
-                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("BottleCaps"), CClientUIInterface::MSG_WARNING);
+                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("Philosopherstone"), CClientUIInterface::MSG_WARNING);
                 }
             }
         }

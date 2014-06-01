@@ -52,6 +52,7 @@ protected:
     void closeEvent(QCloseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     ClientModel *clientModel;
@@ -91,6 +92,8 @@ private:
     QAction *changePassphraseAction;
     QAction *unlockWalletAction;
     QAction *lockWalletAction;
+    QAction *checkWalletAction;
+    QAction *repairWalletAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
 
@@ -107,8 +110,10 @@ private:
     void createMenuBar();
     /** Create the toolbars */
     void createToolBars();
-    /** Create system tray (notification) icon */
+    /** Create system tray icon and notification */
     void createTrayIcon();
+    /** Create system tray menu (or setup the dock menu) */
+    void createTrayIconMenu();
 
 public slots:
     /** Set number of connections shown in the UI */
@@ -121,8 +126,13 @@ public slots:
     */
     void setEncryptionStatus(int status);
 
-    /** Notify the user of an error in the network or transaction handling code. */
-    void error(const QString &title, const QString &message, bool modal);
+    /** Notify the user of an event from the core network or transaction handling code.
+@param[in] title the message box / notification title
+@param[in] message the displayed text
+@param[in] style modality and style definitions (icon and used buttons - buttons only for message boxes)
+@see CClientUIInterface::MessageBoxFlags
+*/
+    void message(const QString &title, const QString &message, unsigned int style);
     /** Asks the user whether to pay the transaction fee or to cancel the transaction.
        It is currently not possible to pass a return value to another thread through
        BlockingQueuedConnection, so an indirected pointer is used.
@@ -166,6 +176,10 @@ private slots:
     void incomingTransaction(const QModelIndex & parent, int start, int end);
     /** Encrypt the wallet */
     void encryptWallet(bool status);
+    /** Check the wallet */
+    void checkWallet();
+    /** Repair the wallet */
+    void repairWallet();
     /** Backup the wallet */
     void backupWallet();
     /** Change encrypted wallet passphrase */

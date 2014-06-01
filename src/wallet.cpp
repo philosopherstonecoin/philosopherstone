@@ -2190,7 +2190,7 @@ void CWallet::FixSpentCoins(int& nMismatchFound, int64& nBalanceInQuestion, int&
             bool fUpdated = false;
             if (IsMine(pcoin->vout[n]) && pcoin->IsSpent(n) && (txindex.vSpent.size() <= n || txindex.vSpent[n].IsNull()))
             {
-                printf("FixSpentCoins found lost coin %scap %s[%d], %s\n",
+                printf("FixSpentCoins found lost coin %sphs %s[%d], %s\n",
                     FormatMoney(pcoin->vout[n].nValue).c_str(), hash.ToString().c_str(), n, fCheckOnly? "repair not attempted" : "repairing");
                 nMismatchFound++;
                 nBalanceInQuestion += pcoin->vout[n].nValue;
@@ -2203,7 +2203,7 @@ void CWallet::FixSpentCoins(int& nMismatchFound, int64& nBalanceInQuestion, int&
             }
             else if (IsMine(pcoin->vout[n]) && !pcoin->IsSpent(n) && (txindex.vSpent.size() > n && !txindex.vSpent[n].IsNull()))
             {
-                printf("FixSpentCoins found spent coin %scap %s[%d], %s\n",
+                printf("FixSpentCoins found spent coin %sphs %s[%d], %s\n",
                     FormatMoney(pcoin->vout[n].nValue).c_str(), hash.ToString().c_str(), n, fCheckOnly? "repair not attempted" : "repairing");
                 nMismatchFound++;
                 nBalanceInQuestion += pcoin->vout[n].nValue;

@@ -6,6 +6,7 @@
 #include <map>
 
 #include "allocators.h" /* for SecureString */
+#include "util.h" /* for int64 */
 
 class OptionsModel;
 class AddressTableModel;
@@ -95,7 +96,9 @@ public:
     bool changePassphrase(const SecureString &oldPass, const SecureString &newPass);
     // Wallet backup
     bool backupWallet(const QString &filename);
-
+    // Wallet Repair
+    void checkWallet(int& nMismatchSpent, int64& nBalanceInQuestion, int& nOrphansFound);
+    void repairWallet(int& nMismatchSpent, int64& nBalanceInQuestion, int& nOrphansFound);
     // RAI object for unlocking wallet, returned by requestUnlock()
     class UnlockContext
     {
@@ -177,8 +180,8 @@ signals:
     // this means that the unlocking failed or was cancelled.
     void requireUnlock();
 
-    // Asynchronous error notification
-    void error(const QString &title, const QString &message, bool modal);
+    // Asynchronous message notification
+    void message(const QString &title, const QString &message,  unsigned int style);
 };
 
 
