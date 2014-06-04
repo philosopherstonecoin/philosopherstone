@@ -282,9 +282,9 @@ void BitcoinGUI::createActions()
     lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock Wallet..."), this);
     lockWalletAction->setStatusTip(tr("Lock the wallet"));
     lockWalletAction->setCheckable(true);
-    checkWalletAction = new QAction(QIcon(":/icons/transaction_confirmed"), tr("&Check Wallet..."), this);
+    checkWalletAction = new QAction(QIcon(":/icons/inspect"), tr("&Check Wallet..."), this);
     checkWalletAction->setStatusTip(tr("Check wallet integrity and report findings"));
-    repairWalletAction = new QAction(QIcon(":/icons/options"), tr("&Repair Wallet..."), this);
+    repairWalletAction = new QAction(QIcon(":/icons/repair"), tr("&Repair Wallet..."), this);
     repairWalletAction->setStatusTip(tr("Fix wallet integrity and remove orphans"));
 	
     signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
