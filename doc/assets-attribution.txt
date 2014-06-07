@@ -52,3 +52,7 @@ Site: http://findicons.com/icon/17102/reload?id=17102
 Icon: src/qt/res/icons/inspect.png, src/qt/res/icons/repair.png
 Designer: DKDance (forum)
 (c) 2014 DKDance
+
+Image: src/qt/res/images/philosopherstone-splash.gif
+Designer: paardenkip (forum)
+(c) 2014 paardenkip
