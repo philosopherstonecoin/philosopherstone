@@ -54,5 +54,5 @@ Designer: DKDance (forum)
 (c) 2014 DKDance
 
 Image: src/qt/res/images/philosopherstone-splash.gif
-Designer: paardenkip (forum)
+Designer: paardenkip/DKDance (forum)
 (c) 2014 paardenkip
