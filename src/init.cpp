@@ -641,6 +641,8 @@ bool AppInit2()
 
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
+        AddOneShot("54.191.71.3");
+        AddOneShot("54.187.14.135");
         AddOneShot("54.201.128.214");
 
     // TODO: replace this by DNSseed
