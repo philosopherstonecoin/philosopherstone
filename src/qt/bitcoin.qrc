@@ -44,13 +44,13 @@
         <file alias="debugwindow">res/icons/debugwindow.png</file>
         <file alias="staking_off">res/icons/staking_off.png</file>
         <file alias="staking_on">res/icons/staking_on.png</file>
-        <file alias="walletlogo">res/icons/phsblue.gif</file>
+        <file alias="walletlogo">res/images/walletlogo.png</file>
         <file alias="inspect">res/icons/inspect.png</file>
         <file alias="repair">res/icons/repair.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.jpg</file>
-        <file alias="splash">res/images/philosopherstone-splash.gif</file>
+        <file alias="splash">res/images/phsblue.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="update_spinner">res/movies/update_spinner.mng</file>

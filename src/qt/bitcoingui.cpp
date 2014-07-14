@@ -277,7 +277,7 @@ void BitcoinGUI::createActions()
     optionsAction->setMenuRole(QAction::PreferencesRole);
     toggleHideAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Show / Hide"), this);
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
-    encryptWalletAction->setStatusTip(tr("Encrypt or decrypt wallet"));
+    encryptWalletAction->setStatusTip(tr("Encrypt the private keys that belong to your wallet"));
     encryptWalletAction->setCheckable(true);
     backupWalletAction = new QAction(QIcon(":/icons/filesave"), tr("&Backup Wallet..."), this);
     backupWalletAction->setStatusTip(tr("Backup wallet to another location"));
@@ -542,6 +542,10 @@ void BitcoinGUI::setNumConnections(int count)
 
 void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
 {
+
+    // Prevent orphan statusbar messages (e.g. hover Quit in main menu, wait until chain-sync starts -> garbelled text)
+    statusBar()->clearMessage();
+
     // don't show / hide progress bar and its label if we have no connection to the network
     if (!clientModel || clientModel->getNumConnections() == 0)
     {
@@ -1092,7 +1096,7 @@ void BitcoinGUI::updateStakingIcon()
         labelStakingIcon->setToolTip(tr("Not staking because wallet is locked"));
       else
 		{
-	  	uint64 nMinWeight = 0, nMaxWeight = 0, nWeight = 0, nBelowWeight = 0, nStones = 0;
+	  	uint64 nWeight = 0, nBelowWeight = 0, nStones = 0;
 		nBelowWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN);
 		nWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL);
 		if (!nWeight)

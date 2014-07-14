@@ -40,8 +40,6 @@ enum WalletFeature
 enum StakeWeightMode
 {
     STAKE_NORMAL = 0, // Over 5 days
-    STAKE_MAXWEIGHT = 1, // at max 15 days
-    STAKE_MINWEIGHT = 3, // between >5 and <15 days
     STAKE_BELOWMIN = 4 // Under 5days
 };
 
