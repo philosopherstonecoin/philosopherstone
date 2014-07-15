@@ -1,3 +1,4 @@
+
 #ifndef OPTIONSMODEL_H
 #define OPTIONSMODEL_H
 
@@ -35,6 +36,7 @@ public:
     };
 
     void Init();
+    void Reset();
 
     /* Migrate settings from wallet.dat after app initialization */
     bool Upgrade(); /* returns true if settings upgraded */
