@@ -99,6 +99,10 @@ public:
     // Wallet Repair
     void checkWallet(int& nMismatchSpent, int64& nBalanceInQuestion, int& nOrphansFound);
     void repairWallet(int& nMismatchSpent, int64& nBalanceInQuestion, int& nOrphansFound);
+    //Wallet Inport/Export
+    bool dumpWallet(const QString &filename);
+    bool importWallet(const QString &filename);
+
     // RAI object for unlocking wallet, returned by requestUnlock()
     class UnlockContext
     {

@@ -89,6 +89,8 @@ private:
     QAction *exportAction;
     QAction *encryptWalletAction;
     QAction *backupWalletAction;
+    QAction *dumpWalletAction;
+    QAction *importWalletAction;
     QAction *changePassphraseAction;
     QAction *unlockWalletAction;
     QAction *lockWalletAction;
@@ -180,6 +182,9 @@ private slots:
     void checkWallet();
     /** Repair the wallet */
     void repairWallet();
+    /** Import/Export the wallet's keys */
+    void dumpWallet();
+    void importWallet();
     /** Backup the wallet */
     void backupWallet();
     /** Change encrypted wallet passphrase */

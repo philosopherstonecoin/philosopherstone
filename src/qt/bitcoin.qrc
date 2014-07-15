@@ -47,6 +47,8 @@
         <file alias="walletlogo">res/images/walletlogo.png</file>
         <file alias="inspect">res/icons/inspect.png</file>
         <file alias="repair">res/icons/repair.png</file>
+        <file alias="import">res/icons/import.png</file>
+        <file alias="export2">res/icons/export2.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.jpg</file>
