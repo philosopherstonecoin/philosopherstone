@@ -27,6 +27,7 @@ using namespace boost;
 CWallet* pwalletMain;
 CClientUIInterface uiInterface;
 unsigned int nNodeLifespan;
+unsigned int nMinerSleep;
 enum Checkpoints::CPMode CheckpointsMode;
 bool fUseFastIndex;
 
@@ -371,6 +372,8 @@ bool AppInit2()
     if (fTestNet) {
         SoftSetBoolArg("-irc", true);
     }
+
+    nMinerSleep = GetArg("-minersleep", 500);
 
     if (mapArgs.count("-bind")) {
         // when specifying an explicit binding address, you want to listen on it
