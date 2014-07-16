@@ -88,6 +88,7 @@ extern std::map<uint256, CBlock*> mapOrphanBlocks;
 
 // Settings
 extern int64 nTransactionFee;
+extern int64 nMinimumInputValue;
 extern bool fUseFastIndex;
 
 // Minimum disk space required - used in CheckDiskSpace()
