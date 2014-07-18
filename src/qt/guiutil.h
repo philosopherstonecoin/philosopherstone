@@ -4,6 +4,8 @@
 #include <QString>
 #include <QObject>
 #include <QMessageBox>
+#include <QLabel>
+
 
 QT_BEGIN_NAMESPACE
 class QFont;
@@ -12,6 +14,7 @@ class QWidget;
 class QDateTime;
 class QUrl;
 class QAbstractItemView;
+class QLabel;
 QT_END_NAMESPACE
 class SendCoinsRecipient;
 
@@ -115,6 +118,22 @@ namespace GUIUtil
         QString header;
         QString coreOptions;
         QString uiOptions;
+    };
+
+    class ClickableLabel : public QLabel
+    {
+
+    Q_OBJECT
+
+    public:
+        explicit ClickableLabel( const QString& text ="", QWidget * parent = 0 );
+        ~ClickableLabel();
+
+    signals:
+        void clicked();
+
+    protected:
+        void mouseReleaseEvent ( QMouseEvent * event );
     };
 
 } // namespace GUIUtil
