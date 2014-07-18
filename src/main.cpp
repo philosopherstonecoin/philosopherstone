@@ -3224,6 +3224,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             {
                 // Send block from disk
                 map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(inv.hash);
+                pfrom->nBlocksRequested++;
                 if (mi != mapBlockIndex.end())
                 {
                     CBlock block;
