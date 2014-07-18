@@ -287,6 +287,8 @@ std::string HelpMessage()
         "  -walletnotify=<cmd>    " + _("Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)") + "\n" +
         "  -newtxnotify=<cmd>     " + _("Execute command when a new wallet transaction occurs (%s in cmd is replaced by TxID)") + "\n" +
         "  -confirmnotify=<cmd>   " + _("Execute command when a wallet transaction is confirmed (%s in cmd is replaced by TxID)") + "\n" +
+        "  -powblockfoundnotify=<cmd>" + _("Execute command when a Proof of Work block is found (%s in cmd is replaced by block hash)") + "\n" +
+        "  -posblockfoundnotify=<cmd>" + _("Execute command when a Proof of Stake block is found (%s in cmd is replaced by block hash)") + "\n" +
         "  -confchange            " + _("Require a confirmations for change (default: 0)") + "\n" +
         "  -enforcecanonical      " + _("Enforce transaction scripts to use canonical PUSH operators (default: 1)") + "\n" +
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +

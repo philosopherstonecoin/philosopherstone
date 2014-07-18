@@ -471,6 +471,13 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         // Process this block the same as if we had received it from another node
         if (!ProcessBlock(NULL, pblock))
             return error("CheckWork : ProcessBlock, block not accepted");
+
+        std::string strCmd = GetArg("-powblockfoundnotify", "");
+        if (!strCmd.empty())
+        {
+            boost::replace_all(strCmd, "%s", hashBlock.GetHex());
+            boost::thread t(runCommand, strCmd); // thread runs free
+        }
     }
     return true;
 }
@@ -507,6 +514,13 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
         // Process this block the same as if we had received it from another node
         if (!ProcessBlock(NULL, pblock))
             return error("CheckStake() : ProcessBlock, block not accepted");
+
+        std::string strCmd = GetArg("-posblockfoundnotify", "");
+        if (!strCmd.empty())
+        {
+            boost::replace_all(strCmd, "%s", hashBlock.GetHex());
+            boost::thread t(runCommand, strCmd); // thread runs free
+        }
     }
 
     return true;
