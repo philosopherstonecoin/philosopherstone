@@ -19,6 +19,7 @@
 #include "walletdb.h"
 
 extern bool fWalletUnlockMintOnly;
+extern bool fConfChange;
 class CAccountingEntry;
 class CWalletTx;
 class CReserveKey;
@@ -652,6 +653,8 @@ public:
         if (GetDepthInMainChain() >= 1)
             return true;
         if (!IsFromMe()) // using wtx's cached debit
+            return false;
+        if (fConfChange)
             return false;
 
         // If no confirmations but it's from us, we can still
