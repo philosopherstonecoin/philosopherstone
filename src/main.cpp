@@ -2818,7 +2818,7 @@ string GetWarnings(string strFor)
         strRPC = "test";
 
     if (!CLIENT_VERSION_IS_RELEASE)
-        strStatusBar = _("1.6.4 BETA - Please Notify developer of any bugs or requests");
+        strStatusBar = _("1.6.5 BETA - Please Notify developer of any bugs or requests");
 
     // ppcoin: wallet lock warning for minting
     if (strMintWarning != "")
