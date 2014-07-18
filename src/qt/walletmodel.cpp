@@ -66,6 +66,11 @@ int WalletModel::getNumTransactions() const
     return numTransactions;
 }
 
+int WalletModel::getWalletVersion() const
+{
+    return wallet->GetVersion();
+}
+
 void WalletModel::updateStatus()
 {
     EncryptionStatus newEncryptionStatus = getEncryptionStatus();

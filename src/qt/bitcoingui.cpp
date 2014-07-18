@@ -143,8 +143,12 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     frameBlocksLayout->setSpacing(3);
     labelStakingIcon = new QLabel();
     labelEncryptionIcon = new QLabel();
+
     labelConnectionsIcon = new QLabel();
-    labelBlocksIcon = new QLabel();
+
+    labelBlocksIcon = new GUIUtil::ClickableLabel();
+    connect(labelBlocksIcon, SIGNAL(clicked()),this,SLOT(blocksIconClicked()));
+
     frameBlocksLayout->addStretch();
     frameBlocksLayout->addWidget(labelEncryptionIcon);
     frameBlocksLayout->addStretch();
@@ -533,6 +537,33 @@ void BitcoinGUI::aboutClicked()
     AboutDialog dlg;
     dlg.setModel(clientModel);
     dlg.exec();
+}
+
+void BitcoinGUI::blocksIconClicked()
+{
+
+   int unit = clientModel->getOptionsModel()->getDisplayUnit();
+
+   message(tr("Extended Block Chain Information"),
+       tr("Client Version: %1\n"
+          "Protocol Version: %2\n"
+          "Wallet Version: %3\n\n"
+          "Last Block Number: %4\n"
+          "Last Block Time: %5\n\n"
+          "Current PoW Difficulty: %6\n"
+          "Current PoW Mh/s: %7\n"
+          "Current PoW Reward: %8\n\n"
+          "Network Money Supply: %9\n")
+          .arg(clientModel->formatFullVersion())
+          .arg(clientModel->getProtocolVersion())
+          .arg(walletModel->getWalletVersion())
+          .arg(clientModel->getNumBlocks())
+          .arg(clientModel->getLastBlockDate().toString())
+          .arg(clientModel->getPoWDifficulty())
+          .arg(clientModel->getPoWMHashPS())
+          .arg(tr("10.0000000")) //Hard Coded as CAP is always 10, but should use GetProofOfWorkReward
+          .arg(BitcoinUnits::formatWithUnit(unit, clientModel->getMoneySupply(), false))
+       ,CClientUIInterface::MODAL);
 }
 
 void BitcoinGUI::setNumConnections(int count)

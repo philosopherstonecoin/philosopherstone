@@ -69,6 +69,7 @@ public:
     qint64 getUnconfirmedBalance() const;
     qint64 getImmatureBalance() const;
     int getNumTransactions() const;
+    int getWalletVersion() const;
     EncryptionStatus getEncryptionStatus() const;
 
     // Check address for validity
