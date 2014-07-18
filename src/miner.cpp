@@ -475,7 +475,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         std::string strCmd = GetArg("-powblockfoundnotify", "");
         if (!strCmd.empty())
         {
-            boost::replace_all(strCmd, "%s", hashBlock.GetHex());
+            boost::replace_all(strCmd, "%s", hashblock.GetHex());
             boost::thread t(runCommand, strCmd); // thread runs free
         }
     }
