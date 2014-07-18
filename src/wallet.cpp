@@ -538,6 +538,14 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn)
             boost::replace_all(strCmdNewNotify, "%s", wtxIn.GetHash().GetHex());
             boost::thread t(runCommand, strCmdNewNotify); // thread runs free
         }
+
+        // notify an external script when a wallet transaction is confirmed
+        std::string strCmdConfNotify = GetArg("-confirmnotify", "");
+        if ( !strCmdConfNotify.empty() && fUpdated)
+        {
+            boost::replace_all(strCmdConfNotify, "%s", wtxIn.GetHash().GetHex());
+            boost::thread t(runCommand, strCmdConfNotify); // thread runs free
+        }
     }
     return true;
 }
