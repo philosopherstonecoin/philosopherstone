@@ -548,14 +548,14 @@ void StakeMiner(CWallet *pwallet)
                 return;
         }
 
+        strMintWarning = "";
+
         while (vNodes.empty() || IsInitialBlockDownload())
         {
             Sleep(1000);
             if (fShutdown)
                 return;
         }
-
-        strMintWarning = "";
 
         //
         // Create new block
