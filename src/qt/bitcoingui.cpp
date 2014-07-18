@@ -143,7 +143,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     frameBlocksLayout->setContentsMargins(3,0,3,0);
     frameBlocksLayout->setSpacing(3);
     labelStakingIcon = new QLabel();
-    labelEncryptionIcon = new QLabel();
+    labelEncryptionIcon = new GUIUtil::ClickableLabel();
 
     labelConnectionsIcon = new GUIUtil::ClickableLabel();
     connect(labelConnectionsIcon, SIGNAL(clicked()),this,SLOT(connectionIconClicked()));
@@ -560,6 +560,15 @@ void BitcoinGUI::blocksIconClicked()
           .arg(clientModel->getLastBlockDate().toString())
           .arg(BitcoinUnits::formatWithUnit(unit, clientModel->getMoneySupply(), false))
        ,CClientUIInterface::MODAL);
+}
+
+void BitcoinGUI::lockIconClicked()
+{
+    if(!walletModel)
+        return;
+
+    if(walletModel->getEncryptionStatus() == WalletModel::Locked)
+        unlockWalletForMint();
 }
 
 void BitcoinGUI::connectionIconClicked()
@@ -986,6 +995,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setEnabled(false);
         lockWalletAction->setEnabled(false);
         encryptWalletAction->setEnabled(true);
+        disconnect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         break;
     case WalletModel::Unlocked:
         labelEncryptionIcon->show();
@@ -998,6 +1008,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
         unlockWalletAction->setEnabled(false);
         lockWalletAction->setEnabled(true);
+        disconnect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
@@ -1010,6 +1021,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
         unlockWalletAction->setEnabled(true);
         lockWalletAction->setEnabled(false);
+        connect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));
         break;
     }
 }
