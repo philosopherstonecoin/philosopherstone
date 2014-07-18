@@ -552,18 +552,12 @@ void BitcoinGUI::blocksIconClicked()
           "Wallet Version: %3\n\n"
           "Last Block Number: %4\n"
           "Last Block Time: %5\n\n"
-          "Current PoW Difficulty: %6\n"
-          "Current PoW Mh/s: %7\n"
-          "Current PoW Reward: %8\n\n"
           "Network Money Supply: %9\n")
           .arg(clientModel->formatFullVersion())
           .arg(clientModel->getProtocolVersion())
           .arg(walletModel->getWalletVersion())
           .arg(clientModel->getNumBlocks())
           .arg(clientModel->getLastBlockDate().toString())
-          .arg(clientModel->getPoWDifficulty())
-          .arg(clientModel->getPoWMHashPS())
-          .arg(tr("10.0000000")) //Hard Coded as CAP is always 10, but should use GetProofOfWorkReward
           .arg(BitcoinUnits::formatWithUnit(unit, clientModel->getMoneySupply(), false))
        ,CClientUIInterface::MODAL);
 }

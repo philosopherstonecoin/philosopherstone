@@ -69,20 +69,11 @@ int ClientModel::getProtocolVersion() const
     return PROTOCOL_VERSION;
 }
 
-double ClientModel::getPoWDifficulty()
-{
-    return GetDifficulty(pindexBest);
-}
-
 int64 ClientModel::getMoneySupply()
 {
     return pindexBest->nMoneySupply;
 }
 
-double ClientModel::getPoWMHashPS()
-{
-    return GetPoWMHashPS();
-}
 
 int ClientModel::getNumBlocksAtStartup()
 {
