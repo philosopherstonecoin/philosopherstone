@@ -171,6 +171,8 @@ private slots:
     void aboutClicked();
     /** Show information about network */
     void blocksIconClicked();
+    /** Show information about peers */
+    void connectionIconClicked();
 #ifndef Q_OS_MAC
     /** Handle tray icon clicked */
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);

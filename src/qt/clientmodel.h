@@ -7,6 +7,7 @@ class OptionsModel;
 class AddressTableModel;
 class TransactionTableModel;
 class CWallet;
+class CNodeStats;
 
 QT_BEGIN_NAMESPACE
 class QDateTime;
@@ -30,6 +31,8 @@ public:
     qint64 getMoneySupply();
     double getPoWDifficulty();
     double getPoWMHashPS();
+
+    QVector<CNodeStats> getPeerStats();
 
     QDateTime getLastBlockDate() const;
 
