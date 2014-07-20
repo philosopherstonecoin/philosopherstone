@@ -142,7 +142,6 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     QHBoxLayout *frameBlocksLayout = new QHBoxLayout(frameBlocks);
     frameBlocksLayout->setContentsMargins(3,0,3,0);
     frameBlocksLayout->setSpacing(3);
-    labelStakingIcon = new QLabel();
     labelEncryptionIcon = new GUIUtil::ClickableLabel();
 
     labelConnectionsIcon = new GUIUtil::ClickableLabel();
@@ -150,6 +149,10 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     labelBlocksIcon = new GUIUtil::ClickableLabel();
     connect(labelBlocksIcon, SIGNAL(clicked()),this,SLOT(blocksIconClicked()));
+
+    labelStakingIcon = new GUIUtil::ClickableLabel();
+    connect(labelStakingIcon, SIGNAL(clicked()), this, SLOT(blocksIconClicked()));
+
 
     frameBlocksLayout->addStretch();
     frameBlocksLayout->addWidget(labelEncryptionIcon);
@@ -352,8 +355,6 @@ void BitcoinGUI::createMenuBar()
     file->addAction(importWalletAction);
     file->addSeparator();
     file->addAction(exportAction);
-    file->addAction(signMessageAction);
-    file->addAction(verifyMessageAction);
     file->addSeparator();
     file->addAction(quitAction);
 
@@ -368,6 +369,9 @@ void BitcoinGUI::createMenuBar()
     wallet->addSeparator();
     wallet->addAction(checkWalletAction);
     wallet->addAction(repairWalletAction);
+    wallet->addSeparator();
+    wallet->addAction(signMessageAction);
+    wallet->addAction(verifyMessageAction);
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
     help->addAction(openRPCConsoleAction);
@@ -428,6 +432,7 @@ void BitcoinGUI::setClientModel(ClientModel *clientModel)
 
         setNumBlocks(clientModel->getNumBlocks(), clientModel->getNumBlocksOfPeers());
         connect(clientModel, SIGNAL(numBlocksChanged(int,int)), this, SLOT(setNumBlocks(int,int)));
+        connect(clientModel, SIGNAL(numBlocksChanged(int,int)), this, SLOT(updateStakingIcon()));
 
         // Report errors from network/worker thread
         connect(clientModel, SIGNAL(message(QString,QString,unsigned int)), this, SLOT(message(QString,QString,unsigned int)));
@@ -499,8 +504,10 @@ void BitcoinGUI::createTrayIconMenu()
 #endif
 
     // Configuration of the tray icon (or dock icon) icon menu
+#ifndef Q_OS_MAC // This is built-in on Mac
     trayIconMenu->addAction(toggleHideAction);
     trayIconMenu->addSeparator();
+#endif
     trayIconMenu->addAction(sendCoinsAction);
     trayIconMenu->addAction(receiveCoinsAction);
     trayIconMenu->addSeparator();
@@ -545,6 +552,11 @@ void BitcoinGUI::aboutClicked()
 void BitcoinGUI::blocksIconClicked()
 {
 
+		uint64 nWeight = 0, nBelowWeight = 0, nStones = 0;
+		nBelowWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN);
+		nWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL);
+		nStones=nWeight/730;
+		
    int unit = clientModel->getOptionsModel()->getDisplayUnit();
 
    message(tr("Extended Block Chain Information"),
@@ -553,12 +565,22 @@ void BitcoinGUI::blocksIconClicked()
           "Wallet Version: %3\n\n"
           "Last Block Number: %4\n"
           "Last Block Time: %5\n\n"
-          "Network Money Supply: %9\n")
+          "BelowWeight: %6\n"
+          "MintWeight: %7\n"
+          "Mintable Stones: %8 \n\n"
+          "Current Difficulty: %9 \n\n"      
+
+          "Network Money Supply: %10\n")
+
           .arg(clientModel->formatFullVersion())
           .arg(clientModel->getProtocolVersion())
           .arg(walletModel->getWalletVersion())
           .arg(clientModel->getNumBlocks())
           .arg(clientModel->getLastBlockDate().toString())
+		  .arg(nBelowWeight)
+		  .arg(nWeight)
+		  .arg(nStones)
+		  .arg(clientModel->GetDifficulty())
           .arg(BitcoinUnits::formatWithUnit(unit, clientModel->getMoneySupply(), false))
        ,CClientUIInterface::MODAL);
 }
@@ -569,7 +591,7 @@ void BitcoinGUI::lockIconClicked()
         return;
 
     if(walletModel->getEncryptionStatus() == WalletModel::Locked)
-        unlockWalletForMint();
+        unlockWallet();
 }
 
 void BitcoinGUI::connectionIconClicked()
@@ -589,8 +611,8 @@ void BitcoinGUI::connectionIconClicked()
       strPeer=strPeer+tr("Time Connected: %1\n") .arg(QDateTime::fromTime_t(QDateTime::currentDateTimeUtc().toTime_t() - stats.nTimeConnected).toUTC().toString("hh:mm:ss"));
       strPeer=strPeer+tr("Time of Last Send: %1\n") .arg(QDateTime::fromTime_t(stats.nLastSend).toString());
       strPeer=strPeer+tr("Time of Last Recv: %1\n") .arg(QDateTime::fromTime_t(stats.nLastRecv).toString());
-      strPeer=strPeer+tr("Bytes Sent: %1\n") .arg(stats.nSendBytes);
-      strPeer=strPeer+tr("Bytes Recv: %1\n") .arg(stats.nRecvBytes);
+      strPeer=strPeer+tr("KBytes Sent: %1\n") .arg(stats.nSendBytes/1000);
+      strPeer=strPeer+tr("KBytes Recv: %1\n") .arg(stats.nRecvBytes/1000);
       strPeer=strPeer+tr("Blocks Requested: %1\n") .arg(stats.nBlocksRequested);
       strPeer=strPeer+tr("Version: %1\n") .arg(stats.nVersion);
       strPeer=strPeer+tr("SubVersion: %1\n") .arg(stats.strSubVer.c_str());
@@ -603,23 +625,18 @@ void BitcoinGUI::connectionIconClicked()
 
   message(tr("Extended Peer Information"),
           tr("\tNumber of Connections: %1\n"
-             "\tTotal Bytes Recv: %2\n"
-             "\tTotal Bytes Sent: %3\n"
+             "\tTotal KBytes Recv: %2\n"
+             "\tTotal KBytes Sent: %3\n"
              "\tTotal Blocks Requested: %4\n\n"
              "\tPlease click \"Show Details\" for more information.\n")
           .arg(clientModel->getNumConnections())
-          .arg(nTotRecvBytes)
-          .arg(nTotSendBytes)
+          .arg(nTotRecvBytes/1000)
+          .arg(nTotSendBytes/1000)
           .arg(nTotBlocksRequested),
           CClientUIInterface::MODAL,
           tr("%1")
           .arg(strAllPeer));
-
-
-
 }
-
-
 
 void BitcoinGUI::setNumConnections(int count)
 {
@@ -658,24 +675,24 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
         int nRemainingBlocks = nTotalBlocks - count;
         float nPercentageDone = count / (nTotalBlocks * 0.01f);
 
-        progressBarLabel->setText(tr("Synchronizing with network..."));
+        progressBarLabel->setText(tr("Synchronizing..."));
         progressBarLabel->setVisible(true);
         progressBar->setFormat(tr("~%n block(s) remaining", "", nRemainingBlocks));
         progressBar->setMaximum(nTotalBlocks);
         progressBar->setValue(count);
         progressBar->setVisible(true);
 
-        tooltip = tr("Downloaded %1 of %2 blocks of transaction history (%3% done).").arg(count).arg(nTotalBlocks).arg(nPercentageDone, 0, 'f', 2);
+        tooltip = tr("Downloaded %1 of %2 blocks (%3% done).").arg(count).arg(nTotalBlocks).arg(nPercentageDone, 0, 'f', 2);
     }
     else
     {
         progressBarLabel->setVisible(false);
 
         progressBar->setVisible(false);
-        tooltip = tr("Downloaded %1 blocks of transaction history.").arg(count);
+        tooltip = tr("Downloaded %1 blocks.").arg(count);
     }
 
-	tooltip = tr("Current Stake difficulty is %1.").arg(clientModel->GetDifficulty()) + QString("<br>") + tooltip;
+	tooltip = tr("Current difficulty is %1.").arg(clientModel->GetDifficulty()) + QString("<br>") + tooltip;
 
     QDateTime lastBlockDate = clientModel->getLastBlockDate();
     int secs = lastBlockDate.secsTo(QDateTime::currentDateTime());
@@ -723,7 +740,7 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     if(!text.isEmpty())
     {
         tooltip += QString("<br>");
-        tooltip += tr("Last received block was generated %1.").arg(text);
+        tooltip += tr("Last received block generated %1.").arg(text);
     }
 
     // Don't word-wrap this (fixed-width) tooltip

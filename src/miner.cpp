@@ -471,13 +471,6 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         // Process this block the same as if we had received it from another node
         if (!ProcessBlock(NULL, pblock))
             return error("CheckWork : ProcessBlock, block not accepted");
-
-        std::string strCmd = GetArg("-powblockfoundnotify", "");
-        if (!strCmd.empty())
-        {
-            boost::replace_all(strCmd, "%s", hashblock.GetHex());
-            boost::thread t(runCommand, strCmd); // thread runs free
-        }
     }
     return true;
 }
@@ -524,6 +517,49 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
     }
 
     return true;
+}
+
+void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
+{
+    SetThreadPriority(THREAD_PRIORITY_LOWEST);
+
+    // Make this thread recognisable as the mining thread
+    RenameThread("bitcoin-miner");
+
+    // Each thread has its own key and counter
+    CReserveKey reservekey(pwallet);
+    unsigned int nExtraNonce = 0;
+
+    while (fProofOfStake)
+    {
+        if (fShutdown)
+            return;
+        while (vNodes.empty() || IsInitialBlockDownload())
+        {
+            Sleep(1000);
+            if (fShutdown)
+                return;
+            if (!fProofOfStake)
+                return;
+        }
+
+        while (pwallet->IsLocked())
+        {
+            Sleep(1000);
+        }
+        strMintWarning = "";
+
+        //
+        // Create new block
+        //
+        CBlockIndex* pindexPrev = pindexBest;
+
+        auto_ptr<CBlock> pblock(CreateNewBlock(pwallet, false));
+        if (!pblock.get())
+            return;
+        IncrementExtraNonce(pblock.get(), pindexPrev, nExtraNonce);
+       
+    }
 }
 
 void StakeMiner(CWallet *pwallet)
