@@ -11,8 +11,8 @@
 #define CLIENT_VERSION_IS_RELEASE false
 
 #define CLIENT_VERSION_MAJOR       1
-#define CLIENT_VERSION_MINOR       0
-#define CLIENT_VERSION_REVISION    1
+#define CLIENT_VERSION_MINOR       6
+#define CLIENT_VERSION_REVISION    5
 #define CLIENT_VERSION_BUILD       0
 
 // Converts the parameter X to a string after macro replacement on X has been performed.
