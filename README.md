@@ -10,7 +10,12 @@ Stones will generate if held and not moved for 10-15 days.
    - 6/50 confirmations for transactions/new mint
    - Messaging
    - Proof of Stake only Switch after 10 month initial distribution (complete)
+   - Always 50% stake, regardless of difficulty
 
-Stone Stats: http://phstones.com/mobile.php
+HomePage http://phstones.com
 
-Forum: http://bitcointalk.org/index.php?topic=292720.0
+Forum http://bitcointalk.org/index.php?topic=292720.0
+
+Forum 2 http://cryptocointalk.com/forum/318-philosopherstone-phs/
+
+Explorer http://stakecoins.info

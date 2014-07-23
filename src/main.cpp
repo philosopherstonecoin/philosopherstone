@@ -49,7 +49,7 @@ unsigned int nStakeTargetSpacingNEW = 200;
 
 int64 nChainStartTime = 1374911180;
 int nCoinbaseMaturity = 30;
-int nCoinbaseMaturityMultipiler = 150;
+int nCoinbaseMaturityMultipiler = 130;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
