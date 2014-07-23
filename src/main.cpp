@@ -49,7 +49,7 @@ unsigned int nStakeTargetSpacingNEW = 200;
 
 int64 nChainStartTime = 1374911180;
 int nCoinbaseMaturity = 30;
-int nCoinbaseMaturityMultipiler = 75;
+int nCoinbaseMaturityMultipiler = 130;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
@@ -1558,9 +1558,6 @@ bool CBlock::DisconnectBlock(CTxDB& txdb, CBlockIndex* pindex)
 
 bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 {
-// Temp for halving fork issue
-    if (GetHash() == uint256("0xde7e198bb7a9de8fc28858e0a3537abef9c0803289764fcca67ded94ee7eba15"))
-        return error("CheckBlock() :195035 hash == de7e198bb7a9de8fc28858e0a3537abef9c0803289764fcca67ded94ee7eba15");
     // Check it again in case a previous version let a bad block in
     if (!CheckBlock(!fJustCheck, !fJustCheck))
         return false;
@@ -2831,7 +2828,7 @@ string GetWarnings(string strFor)
         strRPC = "test";
 
     if (!CLIENT_VERSION_IS_RELEASE)
-        strStatusBar = _("1.6.5 BETA - Please Notify developer of any bugs or requests");
+        strStatusBar = _("1.6.5 BETA - BACKUP before use - Notify developer of bugs or problems");
 
     // ppcoin: wallet lock warning for minting
     if (strMintWarning != "")
