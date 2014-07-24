@@ -536,7 +536,7 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
             return;
         while (vNodes.empty() || IsInitialBlockDownload())
         {
-            Sleep(1000);
+            MilliSleep(1000);
             if (fShutdown)
                 return;
             if (!fProofOfStake)
@@ -545,7 +545,7 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
 
         while (pwallet->IsLocked())
         {
-            Sleep(1000);
+            MilliSleep(1000);
         }
         strMintWarning = "";
 
@@ -558,7 +558,6 @@ void BitcoinMiner(CWallet *pwallet, bool fProofOfStake)
         if (!pblock.get())
             return;
         IncrementExtraNonce(pblock.get(), pindexPrev, nExtraNonce);
-       
     }
 }
 
@@ -579,7 +578,7 @@ void StakeMiner(CWallet *pwallet)
 
         while (pwallet->IsLocked())
         {
-            Sleep(1000);
+            MilliSleep(1000);
             if (fShutdown)
                 return;
         }
@@ -588,7 +587,7 @@ void StakeMiner(CWallet *pwallet)
 
         while (vNodes.empty() || IsInitialBlockDownload())
         {
-            Sleep(1000);
+            MilliSleep(1000);
             if (fShutdown)
                 return;
         }
@@ -609,9 +608,9 @@ void StakeMiner(CWallet *pwallet)
             SetThreadPriority(THREAD_PRIORITY_NORMAL);
             CheckStake(pblock.get(), *pwallet);
             SetThreadPriority(THREAD_PRIORITY_LOWEST);
-            Sleep(500);
+            MilliSleep(500);
         }
-        Sleep(nMinerSleep);
+        MilliSleep(nMinerSleep);
         continue;
     }
 }
