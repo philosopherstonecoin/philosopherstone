@@ -471,11 +471,11 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
             CPubKey pubkey;
             CKeyID *keyid = boost::get< CKeyID >(&address);
             if (keyid && model->getPubKey(*keyid, pubkey))
-                nBytesInputs += (pubkey.IsCompressed() ? 148 : 180);
+                nBytesInputs += (pubkey.IsCompressed() ? 115 : 180);
             else
-                nBytesInputs += 148; // in all error cases, simply assume 148 here
+                nBytesInputs += 115; // in all error cases, simply assume 148 here
         }
-        else nBytesInputs += 148;
+        else nBytesInputs += 115;
     }
     
     // calculation
