@@ -749,6 +749,10 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     labelBlocksIcon->setToolTip(tooltip);
     progressBarLabel->setToolTip(tooltip);
     progressBar->setToolTip(tooltip);
+    if(GetBoolArg("-chart", true) && count > 0 && nTotalBlocks > 0)
+    {
+        overviewPage->updatePlot(count);
+    }
 }
 
 void BitcoinGUI::message(const QString &title, const QString &message, unsigned int style, const QString &detail)
