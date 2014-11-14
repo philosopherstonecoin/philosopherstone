@@ -166,7 +166,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     QTimer *timerStakingIcon = new QTimer(labelStakingIcon);
     connect(timerStakingIcon, SIGNAL(timeout()), this, SLOT(updateStakingIcon()));
-    timerStakingIcon->start(30 * 1000);
+    timerStakingIcon->start(60 * 1000);
      updateStakingIcon();
 
 	 // Progress bar and label for blocks download
@@ -1280,6 +1280,8 @@ void BitcoinGUI::updateStakingIcon()
 
       if (!clientModel->getNumConnections())
         labelStakingIcon->setToolTip(tr("Not staking because wallet is offline"));
+      else if (clientModel->getNumConnections() < 3 )
+        labelStakingIcon->setToolTip(tr("Not staking because wallet is still acquiring nodes"));
       else if (clientModel->inInitialBlockDownload() || clientModel->getNumBlocks() < clientModel->getNumBlocksOfPeers())
         labelStakingIcon->setToolTip(tr("Not staking because wallet is syncing"));
       else if(walletModel->getEncryptionStatus() == WalletModel::Locked)
