@@ -538,10 +538,6 @@ void CNode::CloseSocketDisconnect()
     }
 }
 
-void CNode::Cleanup()
-{
-}
-
 
 void CNode::PushVersion()
 {
@@ -686,7 +682,6 @@ void ThreadSocketHandler2(void* parg)
 
                     // close socket and cleanup
                     pnode->CloseSocketDisconnect();
-                    pnode->Cleanup();
 
                     // hold in disconnected pool until all refs are released
                     if (pnode->fNetworkNode || pnode->fInbound)
