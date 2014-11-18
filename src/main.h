@@ -43,6 +43,7 @@ static const unsigned int RWD_SWITCH_TIME = 1376006400;		// August 9, 2013 00:00
 static const int64 MAX_SPLIT_AMOUNT = 100 * COIN;
 static const int64 MAX_COMBINE_AMOUNT = MAX_SPLIT_AMOUNT;
 
+static const int MAX_TIME_SINCE_BEST_BLOCK = 10; // how many seconds to wait before sending next PushGetBlocks()
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
