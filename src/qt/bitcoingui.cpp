@@ -1290,18 +1290,29 @@ void BitcoinGUI::updateStakingIcon()
         labelStakingIcon->setToolTip(tr("Not staking because wallet is syncing"));
       else if(walletModel->getEncryptionStatus() == WalletModel::Locked)
         labelStakingIcon->setToolTip(tr("Not staking because wallet is locked"));
-      else
-		{
-	  	uint64 nWeight = 0, nBelowWeight = 0, nStones = 0;
-		nBelowWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN);
-		nWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL);
-		if (!nWeight)
+    else
+      {
+         uint64 nMinWeight = 0, nMaxWeight = 0, nWeight = 0;
+
+         walletModel->getStakeWeight(nMinWeight,nMaxWeight,nWeight);
+         if (!nWeight)
             labelStakingIcon->setToolTip(tr("Not staking because you don't have mature coins"));
           else
-			{
-				nStones=nWeight/730;
-				labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-				labelStakingIcon->setToolTip(tr("Minting.\nBelowWeight %1\nMintWeight %2\nYou are trying to mint %3 Stones").arg(nBelowWeight).arg(nWeight).arg(nStones));
-			}
-		}
+          {
+            uint64 nNetworkWeight = clientModel->getPosKernalPS();
+            int nEstimateTime = clientModel->getStakeTargetSpacing() * 10 * nNetworkWeight / nWeight;
+            QString text;
+            if (nEstimateTime < 60)
+               text = tr("%n second(s)", "", nEstimateTime);
+            else if (nEstimateTime < 60*60)
+               text = tr("%n minute(s)", "", nEstimateTime/60);
+            else if (nEstimateTime < 24*60*60)
+               text = tr("%n hour(s)", "", nEstimateTime/(60*60));
+            else
+               text = tr("%n day(s)", "", nEstimateTime/(60*60*24));
+
+            labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+            labelStakingIcon->setToolTip(tr("Staking.\n Your weight is %1\n Network weight is %2\n You have 50\% chance of producing a stake within %3").arg(nWeight).arg(nNetworkWeight).arg(text));
+          }
+       }
 }

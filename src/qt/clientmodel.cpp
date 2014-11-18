@@ -15,6 +15,8 @@
 static const int64 nClientStartupTime = GetTime();
 double GetDifficulty(const CBlockIndex* blockindex);
 double GetPoWMHashPS();
+double GetPoSKernelPS();
+extern unsigned int nStakeTargetSpacingNEW;
 
 ClientModel::ClientModel(OptionsModel *optionsModel, QObject *parent) :
     QObject(parent), optionsModel(optionsModel),
@@ -33,6 +35,17 @@ ClientModel::~ClientModel()
 {
     unsubscribeFromCoreSignals();
 }
+
+double ClientModel::getPosKernalPS()
+{
+    return GetPoSKernelPS();
+}
+
+int ClientModel::getStakeTargetSpacing()
+{
+    return nStakeTargetSpacingNEW;
+}
+
 
 int ClientModel::getNumConnections() const
 {

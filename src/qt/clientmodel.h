@@ -31,6 +31,8 @@ public:
     qint64 getMoneySupply();
     double getPoWDifficulty();
     double getPoWMHashPS();
+    double getPosKernalPS();
+    int getStakeTargetSpacing();
 
     QVector<CNodeStats> getPeerStats();
 

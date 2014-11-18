@@ -195,6 +195,7 @@ public:
 	uint64 GetStakeWeight(const CKeyStore& keystore, enum StakeWeightMode mode=STAKE_NORMAL);
 	std::string SendMoney(CScript scriptPubKey, int64 nValue, CWalletTx& wtxNew, bool fAskFee=false, std::string strTxComment = "");
     std::string SendMoneyToDestination(const CTxDestination &address, int64 nValue, CWalletTx& wtxNew, bool fAskFee=false, std::string strTxComment = "");
+    bool GetStakeWeight(const CKeyStore& keystore, uint64& nMinWeight, uint64& nMaxWeight, uint64& nWeight);
     bool CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64 nSearchInterval, CTransaction& txNew, CKey& key);
     bool GetStakeWeightFromValue(const int64& nTime, const int64& nValue, uint64& nWeight);
     bool NewKeyPool();

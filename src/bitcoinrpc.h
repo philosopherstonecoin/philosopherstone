@@ -127,6 +127,7 @@ extern int64 nWalletUnlockTime;
 extern int64 AmountFromValue(const json_spirit::Value& value);
 extern json_spirit::Value ValueFromAmount(int64 amount);
 extern double GetDifficulty(const CBlockIndex* blockindex = NULL);
+extern double GetPoSKernelPS();
 extern std::string HelpRequiringPassphrase();
 extern void EnsureWalletIsUnlocked();
 
