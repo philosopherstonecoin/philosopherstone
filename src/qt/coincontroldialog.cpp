@@ -344,18 +344,18 @@ void CoinControlDialog::viewItemChanged(QTreeWidgetItem* item, int column)
 // helper function, return human readable label for priority number
 QString CoinControlDialog::getPriorityLabel(double dPriority)
 {
-    if (dPriority > 576000ULL) // at least medium, this number is from AllowFree(), the other thresholds are kinda random
+    if (dPriority > 57600000ULL) // at least medium, this number is from AllowFree(), the other thresholds are kinda random
     {
-        if      (dPriority > 5760000000ULL)   return tr("highest");
-        else if (dPriority > 576000000ULL)    return tr("high");
-        else if (dPriority > 57600000ULL)     return tr("medium-high");
-        else                                  return tr("medium");
+        if      (dPriority > 576000000000ULL)   return tr("highest");
+        else if (dPriority > 57600000000ULL)    return tr("high");
+        else if (dPriority > 5760000000ULL)     return tr("medium-high");
+        else                                    return tr("medium");
     }
     else
     {
-        if      (dPriority > 5760ULL) return tr("low-medium");
-        else if (dPriority > 58ULL)   return tr("low");
-        else                          return tr("lowest");
+        if      (dPriority > 576000ULL) return tr("low-medium");
+        else if (dPriority > 5760ULL)   return tr("low");
+        else                            return tr("lowest");
     }
 }
 
