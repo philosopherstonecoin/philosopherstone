@@ -65,6 +65,7 @@ extern std::set<std::pair<COutPoint, unsigned int> > setStakeSeen;
 extern uint256 hashGenesisBlock;
 extern CBlockIndex* pindexGenesisBlock;
 extern unsigned int nStakeMinAge;
+extern unsigned int nStakeMinAge2; // PALM
 extern unsigned int nNodeLifespan;
 extern int nCoinbaseMaturity;
 extern int nCoinbaseMaturityMultipiler;

@@ -43,6 +43,7 @@ static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
 unsigned int nStakeMinAge = 60 * 60 * 24 * 5;	// minimum age for coin age: 5d
+unsigned int nStakeMinAge2 = 60 * 60 * 24 * 8.8;	// PALM until fork
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 15;	// stake age of full weight: 15d
 unsigned int nStakeTargetSpacing = 120;			// 2-minute block spacing
 unsigned int nStakeTargetSpacingNEW = 200;
@@ -2838,7 +2839,7 @@ string GetWarnings(string strFor)
         strRPC = "test";
 
     if (!CLIENT_VERSION_IS_RELEASE)
-        strStatusBar = _("1.6.5 BETA - BACKUP before use - Notify developer of bugs or problems");
+        strStatusBar = _("BETA - BACKUP before use - Notify developer of any issues, thanks");
 
     // ppcoin: wallet lock warning for minting
     if (strMintWarning != "")
