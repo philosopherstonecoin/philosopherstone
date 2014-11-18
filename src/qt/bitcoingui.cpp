@@ -552,11 +552,15 @@ void BitcoinGUI::aboutClicked()
 void BitcoinGUI::blocksIconClicked()
 {
 
-		uint64 nWeight = 0, nBelowWeight = 0, nStones = 0;
-		nBelowWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN);
-		nWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL);
-		nStones=nWeight/730;
+   uint64 nWeight = 0, nBelowWeight = 0, nStones = 0;
+   nBelowWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN);
+   nWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL);
+   nStones=nWeight/730;
 		
+   TRY_LOCK(cs_main, lockMain);
+   if(!lockMain)
+       return;
+
    int unit = clientModel->getOptionsModel()->getDisplayUnit();
 
    message(tr("Extended Block Chain Information"),
