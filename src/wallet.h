@@ -196,6 +196,7 @@ public:
 	std::string SendMoney(CScript scriptPubKey, int64 nValue, CWalletTx& wtxNew, bool fAskFee=false, std::string strTxComment = "");
     std::string SendMoneyToDestination(const CTxDestination &address, int64 nValue, CWalletTx& wtxNew, bool fAskFee=false, std::string strTxComment = "");
     bool CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64 nSearchInterval, CTransaction& txNew, CKey& key);
+    bool GetStakeWeightFromValue(const int64& nTime, const int64& nValue, uint64& nWeight);
     bool NewKeyPool();
     bool TopUpKeyPool(unsigned int nSize = 0);
     int64 AddReserveKey(const CKeyPool& keypool);

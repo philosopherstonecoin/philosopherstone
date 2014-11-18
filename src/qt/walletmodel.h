@@ -104,6 +104,9 @@ public:
     bool dumpWallet(const QString &filename);
     bool importWallet(const QString &filename);
 
+    //PoS Information about value and time
+    void getStakeWeightFromValue(const qint64& nTime, const qint64& nValue, quint64& nWeight);
+
     // RAI object for unlocking wallet, returned by requestUnlock()
     class UnlockContext
     {

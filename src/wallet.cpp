@@ -10,6 +10,7 @@
 #include "crypter.h"
 #include "ui_interface.h"
 #include "base58.h"
+#include "coincontrol.h"
 #include "kernel.h"
 #include "coincontrol.h"
 #include <boost/algorithm/string/replace.hpp>
@@ -1567,6 +1568,21 @@ uint64 CWallet::GetStakeWeight(const CKeyStore& keystore, enum StakeWeightMode m
         printf("StakeWeight bnCoinDay=%"PRI64d"\n", nCoinAge);
 
     return nCoinAge;
+}
+
+bool CWallet::GetStakeWeightFromValue(const int64& nTime, const int64& nValue, uint64& nWeight)
+{
+    // This is a negative value when there is no weight. But set it to zero
+    // so the user is not confused. Used in reporting in Coin Control.
+    // Descisions based on this function should be used with care.
+    int64 nTimeWeight = GetWeight(nTime, (int64)GetTime());
+    if (nTimeWeight < 0 )
+            nTimeWeight=0;
+
+    CBigNum bnCoinDayWeight = CBigNum(nValue) * nTimeWeight / COIN / (24 * 60 * 60);
+    nWeight = bnCoinDayWeight.getuint64();
+
+    return true;
 }
 
 bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64 nSearchInterval, CTransaction& txNew, CKey& key)

@@ -36,9 +36,7 @@ CoinControlDialog::CoinControlDialog(QWidget *parent) :
     QAction *copyAddressAction = new QAction(tr("Copy address"), this);
     QAction *copyLabelAction = new QAction(tr("Copy label"), this);
     QAction *copyAmountAction = new QAction(tr("Copy amount"), this);
-             copyTransactionHashAction = new QAction(tr("Copy transaction ID"), this);  // we need to enable/disable this
-             //lockAction = new QAction(tr("Lock unspent"), this);                        // we need to enable/disable this
-             //unlockAction = new QAction(tr("Unlock unspent"), this);                    // we need to enable/disable this
+    copyTransactionHashAction = new QAction(tr("Copy transaction ID"), this);  // we need to enable/disable this
 
     // context menu
     contextMenu = new QMenu();
@@ -46,9 +44,6 @@ CoinControlDialog::CoinControlDialog(QWidget *parent) :
     contextMenu->addAction(copyLabelAction);
     contextMenu->addAction(copyAmountAction);
     contextMenu->addAction(copyTransactionHashAction);
-    //contextMenu->addSeparator();
-    //contextMenu->addAction(lockAction);
-    //contextMenu->addAction(unlockAction);
 
     // context menu signals
     connect(ui->treeWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showMenu(QPoint)));
@@ -56,9 +51,7 @@ CoinControlDialog::CoinControlDialog(QWidget *parent) :
     connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(copyLabel()));
     connect(copyAmountAction, SIGNAL(triggered()), this, SLOT(copyAmount()));
     connect(copyTransactionHashAction, SIGNAL(triggered()), this, SLOT(copyTransactionHash()));
-    //connect(lockAction, SIGNAL(triggered()), this, SLOT(lockCoin()));
-    //connect(unlockAction, SIGNAL(triggered()), this, SLOT(unlockCoin()));
-
+    
     // clipboard actions
     QAction *clipboardQuantityAction = new QAction(tr("Copy quantity"), this);
     QAction *clipboardAmountAction = new QAction(tr("Copy amount"), this);
@@ -110,10 +103,11 @@ CoinControlDialog::CoinControlDialog(QWidget *parent) :
 
     ui->treeWidget->setColumnWidth(COLUMN_CHECKBOX, 84);
     ui->treeWidget->setColumnWidth(COLUMN_AMOUNT, 100);
+    ui->treeWidget->setColumnWidth(COLUMN_CONFIRMATIONS, 70);
+    ui->treeWidget->setColumnWidth(COLUMN_WEIGHT, 90);
     ui->treeWidget->setColumnWidth(COLUMN_LABEL, 170);
-    ui->treeWidget->setColumnWidth(COLUMN_ADDRESS, 290);
-    ui->treeWidget->setColumnWidth(COLUMN_DATE, 110);
-    ui->treeWidget->setColumnWidth(COLUMN_CONFIRMATIONS, 100);
+    ui->treeWidget->setColumnWidth(COLUMN_ADDRESS, 250);
+    ui->treeWidget->setColumnWidth(COLUMN_DATE, 90);
     ui->treeWidget->setColumnWidth(COLUMN_PRIORITY, 100);
     ui->treeWidget->setColumnHidden(COLUMN_TXHASH, true);         // store transacton hash in this column, but dont show it
     ui->treeWidget->setColumnHidden(COLUMN_VOUT_INDEX, true);     // store vout index in this column, but dont show it
@@ -121,7 +115,7 @@ CoinControlDialog::CoinControlDialog(QWidget *parent) :
     ui->treeWidget->setColumnHidden(COLUMN_PRIORITY_INT64, true); // store priority int64 in this column, but dont show it
 
     // default view is sorted by amount desc
-    sortView(COLUMN_AMOUNT_INT64, Qt::DescendingOrder);
+    sortView(COLUMN_CONFIRMATIONS, Qt::DescendingOrder);
 }
 
 CoinControlDialog::~CoinControlDialog()
@@ -189,22 +183,10 @@ void CoinControlDialog::showMenu(const QPoint &point)
         if (item->text(COLUMN_TXHASH).length() == 64) // transaction hash is 64 characters (this means its a child node, so its not a parent node in tree mode)
         {
             copyTransactionHashAction->setEnabled(true);
-            //if (model->isLockedCoin(uint256(item->text(COLUMN_TXHASH).toStdString()), item->text(COLUMN_VOUT_INDEX).toUInt()))
-            //{
-            //    lockAction->setEnabled(false);
-            //    unlockAction->setEnabled(true);
-            //}
-            //else
-            //{
-            //    lockAction->setEnabled(true);
-            //    unlockAction->setEnabled(false);
-            //}
         }
         else // this means click on parent node in tree mode -> disable all
         {
             copyTransactionHashAction->setEnabled(false);
-            //lockAction->setEnabled(false);
-            //unlockAction->setEnabled(false);
         }
 
         // show context menu
@@ -241,29 +223,6 @@ void CoinControlDialog::copyTransactionHash()
 {
     QApplication::clipboard()->setText(contextMenuItem->text(COLUMN_TXHASH));
 }
-
-// context menu action: lock coin
-/*void CoinControlDialog::lockCoin()
-{
-    if (contextMenuItem->checkState(COLUMN_CHECKBOX) == Qt::Checked)
-        contextMenuItem->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);
-
-    COutPoint outpt(uint256(contextMenuItem->text(COLUMN_TXHASH).toStdString()), contextMenuItem->text(COLUMN_VOUT_INDEX).toUInt());
-    model->lockCoin(outpt);
-    contextMenuItem->setDisabled(true);
-    contextMenuItem->setIcon(COLUMN_CHECKBOX, QIcon(":/icons/lock_closed"));
-    updateLabelLocked();
-}*/
-
-// context menu action: unlock coin
-/*void CoinControlDialog::unlockCoin()
-{
-    COutPoint outpt(uint256(contextMenuItem->text(COLUMN_TXHASH).toStdString()), contextMenuItem->text(COLUMN_VOUT_INDEX).toUInt());
-    model->unlockCoin(outpt);
-    contextMenuItem->setDisabled(false);
-    contextMenuItem->setIcon(COLUMN_CHECKBOX, QIcon());
-    updateLabelLocked();
-}*/
 
 // copy label "Quantity" to clipboard
 void CoinControlDialog::clipboardQuantity()
@@ -369,8 +328,7 @@ void CoinControlDialog::viewItemChanged(QTreeWidgetItem* item, int column)
     if (column == COLUMN_CHECKBOX && item->text(COLUMN_TXHASH).length() == 64) // transaction hash is 64 characters (this means its a child node, so its not a parent node in tree mode)
     {
         COutPoint outpt(uint256(item->text(COLUMN_TXHASH).toStdString()), item->text(COLUMN_VOUT_INDEX).toUInt());
-
-        if (item->checkState(COLUMN_CHECKBOX) == Qt::Unchecked)
+        if (item->checkState(COLUMN_CHECKBOX) == Qt::Unchecked)              
             coinControl->UnSelect(outpt);
         else if (item->isDisabled()) // locked (this happens if "check all" through parent node)
             item->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);
@@ -391,28 +349,15 @@ QString CoinControlDialog::getPriorityLabel(double dPriority)
         if      (dPriority > 5760000000ULL)   return tr("highest");
         else if (dPriority > 576000000ULL)    return tr("high");
         else if (dPriority > 57600000ULL)     return tr("medium-high");
-        else                                    return tr("medium");
+        else                                  return tr("medium");
     }
     else
     {
         if      (dPriority > 5760ULL) return tr("low-medium");
         else if (dPriority > 58ULL)   return tr("low");
-        else                            return tr("lowest");
+        else                          return tr("lowest");
     }
 }
-
-// shows count of locked unspent outputs
-/*void CoinControlDialog::updateLabelLocked()
-{
-    vector<COutPoint> vOutpts;
-    model->listLockedCoins(vOutpts);
-    if (vOutpts.size() > 0)
-    {
-       ui->labelLocked->setText(tr("(%1 locked)").arg(vOutpts.size()));
-       ui->labelLocked->setVisible(true); 
-    }
-    else ui->labelLocked->setVisible(false);
-}*/
 
 void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 {
@@ -626,12 +571,16 @@ void CoinControlDialog::updateView()
         double dPrioritySum = 0;
         int nChildren = 0;
         int nInputSum = 0;
+        uint64 nTxWeight = 0, nTxWeightSum = 0;
         BOOST_FOREACH(const COutput& out, coins.second)
         {
             int nInputSize = 148; // 180 if uncompressed public key
             nSum += out.tx->vout[out.i].nValue;
             nChildren++;
             
+            model->getStakeWeightFromValue(out.tx->GetTxTime(), out.tx->vout[out.i].nValue, nTxWeight);
+            nTxWeightSum += nTxWeight;
+			
             QTreeWidgetItem *itemOutput;
             if (treeMode)    itemOutput = new QTreeWidgetItem(itemWalletAddress);
             else             itemOutput = new QTreeWidgetItem(ui->treeWidget);
@@ -681,8 +630,8 @@ void CoinControlDialog::updateView()
             
             // immature PoS reward
             if (out.tx->IsCoinStake() && out.tx->GetBlocksToMaturity() > 0 && out.tx->GetDepthInMainChain() > 0) {
-              itemOutput->setBackground(COLUMN_CONFIRMATIONS, Qt::red);
-              itemOutput->setDisabled(true);
+                itemOutput->setBackground(COLUMN_CONFIRMATIONS, Qt::red);
+                itemOutput->setDisabled(true);
             }
 
             // confirmations
@@ -694,6 +643,9 @@ void CoinControlDialog::updateView()
             itemOutput->setText(COLUMN_PRIORITY_INT64, strPad(QString::number((int64)dPriority), 20, " "));
             dPrioritySum += (double)out.tx->vout[out.i].nValue  * (out.nDepth+1);
             nInputSum    += nInputSize;
+			
+	    // List Mode Weight
+	    itemOutput->setText(COLUMN_WEIGHT, strPad(QString::number(nTxWeight), 8, " "));
             
             // transaction hash
             uint256 txhash = out.tx->GetHash();
@@ -702,15 +654,6 @@ void CoinControlDialog::updateView()
             // vout index
             itemOutput->setText(COLUMN_VOUT_INDEX, QString::number(out.i));
             
-            // disable locked coins     
-            /*if (model->isLockedCoin(txhash, out.i))
-            {
-                COutPoint outpt(txhash, out.i);
-                coinControl->UnSelect(outpt); // just to be sure
-                itemOutput->setDisabled(true);
-                itemOutput->setIcon(COLUMN_CHECKBOX, QIcon(":/icons/lock_closed"));
-            }*/
-              
             // set checkbox
             if (coinControl->IsSelected(txhash, out.i))
                 itemOutput->setCheckState(COLUMN_CHECKBOX,Qt::Checked);
@@ -725,6 +668,9 @@ void CoinControlDialog::updateView()
             itemWalletAddress->setText(COLUMN_AMOUNT_INT64, strPad(QString::number(nSum), 15, " "));
             itemWalletAddress->setText(COLUMN_PRIORITY, CoinControlDialog::getPriorityLabel(dPrioritySum));
             itemWalletAddress->setText(COLUMN_PRIORITY_INT64, strPad(QString::number((int64)dPrioritySum), 20, " "));
+            //Tree Mode Weight
+            itemWalletAddress->setText(COLUMN_WEIGHT, strPad(QString::number((uint64)nTxWeightSum),8," "));
+        
         }
     }
     
