@@ -28,8 +28,8 @@ static const int DATABASE_VERSION = 70001;
 //
 static const int PROTOCOL_VERSION = 60010;
 
-// earlier versions not supported as of Feb 2012, and are disconnected
-static const int MIN_PROTO_VERSION = 209;
+// intial proto version, to be increased after version/verack negotiation
+static const int INIT_PROTO_VERSION = 209;
 
 // disconnect from peers older than this proto version
 static const int MIN_PEER_PROTO_VERSION = 60009;
