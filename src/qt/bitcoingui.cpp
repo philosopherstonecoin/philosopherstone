@@ -552,41 +552,41 @@ void BitcoinGUI::aboutClicked()
 
 void BitcoinGUI::blocksIconClicked()
 {
-
-   uint64 nWeight = 0, nBelowWeight = 0, nStones = 0;
-   nBelowWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_BELOWMIN);
-   nWeight=pwalletMain->GetStakeWeight(*pwalletMain, STAKE_NORMAL);
-   nStones=nWeight/730;
-		
    TRY_LOCK(cs_main, lockMain);
    if(!lockMain)
        return;
-
+	   
+   uint64 nMinWeight = 0, nMaxWeight = 0, nWeight = 0, nNetweightk = 0, nMoneysupply;
+   walletModel->getStakeWeight(nMinWeight,nMaxWeight,nWeight);
+   nNetweightk=(clientModel->getPosKernalPS()/1000);
+   nMoneysupply=(clientModel->getMoneySupply()/100000);
+		
    int unit = clientModel->getOptionsModel()->getDisplayUnit();
 
    message(tr("Extended Block Chain Information"),
        tr("Client Version: %1\n"
-          "Protocol Version: %2\n"
-          "Wallet Version: %3\n\n"
-          "Last Block Number: %4\n"
-          "Last Block Time: %5\n\n"
-          "BelowWeight: %6\n"
-          "MintWeight: %7\n"
-          "Mintable Stones: %8 \n\n"
-          "Current Difficulty: %9 \n\n"      
+         "Protocol Version: %2\n"
+         "Wallet Version: %3\n\n"
+         "Last Block Number: %4\n"
+         "Last Block Time: %5\n\n"
+         "Split Threshold: %6 PHS\n"
+         "Combine Threshold: %7 PHS\n\n"
+         "Current Difficulty: %8 \n\n"      
+         "Network Weight: %9 K\n"
+         "Your Weight: %10\n\n"
+         "Money Supply: %11\n")
 
-          "Network Money Supply: %10\n")
-
-          .arg(clientModel->formatFullVersion())
-          .arg(clientModel->getProtocolVersion())
-          .arg(walletModel->getWalletVersion())
-          .arg(clientModel->getNumBlocks())
-          .arg(clientModel->getLastBlockDate().toString())
-		  .arg(nBelowWeight)
-		  .arg(nWeight)
-		  .arg(nStones)
-		  .arg(clientModel->GetDifficulty())
-          .arg(BitcoinUnits::formatWithUnit(unit, clientModel->getMoneySupply(), false))
+         .arg(clientModel->formatFullVersion())
+         .arg(clientModel->getProtocolVersion())
+         .arg(walletModel->getWalletVersion())
+         .arg(clientModel->getNumBlocks())
+         .arg(clientModel->getLastBlockDate().toString())
+         .arg(nSplitThreshold)
+         .arg(nCombineThreshold)
+         .arg(clientModel->GetDifficulty())
+         .arg(nNetweightk)
+         .arg(nWeight)
+         .arg(nMoneysupply)
        ,CClientUIInterface::MODAL);
 }
 
@@ -668,7 +668,7 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
         return;
     }
 
-    bool fShowStatusBar = false;
+    bool fShowStatusBar = true;
     QString tooltip;
     QDateTime lastBlockDate = clientModel->getLastBlockDate();
     QDateTime currentDate = QDateTime::currentDateTime();
