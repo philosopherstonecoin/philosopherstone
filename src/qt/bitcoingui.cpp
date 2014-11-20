@@ -556,10 +556,9 @@ void BitcoinGUI::blocksIconClicked()
    if(!lockMain)
        return;
 	   
-   uint64 nMinWeight = 0, nMaxWeight = 0, nWeight = 0, nNetweightk = 0, nMoneysupply;
+   uint64 nMinWeight = 0, nMaxWeight = 0, nWeight = 0, nNetweightk = 0;
    walletModel->getStakeWeight(nMinWeight,nMaxWeight,nWeight);
    nNetweightk=(clientModel->getPosKernalPS()/1000);
-   nMoneysupply=(clientModel->getMoneySupply()/100000);
 		
    int unit = clientModel->getOptionsModel()->getDisplayUnit();
 
@@ -569,8 +568,8 @@ void BitcoinGUI::blocksIconClicked()
          "Wallet Version: %3\n\n"
          "Last Block Number: %4\n"
          "Last Block Time: %5\n\n"
-         "Split Threshold: %6 PHS\n"
-         "Combine Threshold: %7 PHS\n\n"
+         "Split Threshold: %6\n"
+         "Combine Threshold: %7\n\n"
          "Current Difficulty: %8 \n\n"      
          "Network Weight: %9 K\n"
          "Your Weight: %10\n\n"
@@ -581,12 +580,12 @@ void BitcoinGUI::blocksIconClicked()
          .arg(walletModel->getWalletVersion())
          .arg(clientModel->getNumBlocks())
          .arg(clientModel->getLastBlockDate().toString())
-         .arg(nSplitThreshold)
-         .arg(nCombineThreshold)
+         .arg(BitcoinUnits::formatWithUnit(unit, nSplitThreshold, false))
+         .arg(BitcoinUnits::formatWithUnit(unit, nCombineThreshold, false))
          .arg(clientModel->GetDifficulty())
          .arg(nNetweightk)
          .arg(nWeight)
-         .arg(nMoneysupply)
+         .arg(BitcoinUnits::formatWithUnit(unit, clientModel->getMoneySupply(), false))
        ,CClientUIInterface::MODAL);
 }
 

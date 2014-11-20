@@ -295,7 +295,7 @@ std::string HelpMessage()
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
         "  -splitthreshold=<n>    " + _("Set stake split threshold within range (default 20),(max 100))") + "\n" +
-        "  -combinethreshold=<n>  " + _("Set stake combine threshold within range (default 20),(max 100))") + "\n" +
+        "  -combinethreshold=<n>  " + _("Set stake combine threshold within range (default 40),(max 100))") + "\n" +
         "  -salvagewallet         " + _("Attempt to recover private keys from a corrupt wallet.dat") + "\n" +
         "  -checkblocks=<n>       " + _("How many blocks to check at startup (default: 2500, 0 = all)") + "\n" +
         "  -checklevel=<n>        " + _("How thorough the block verification is (0-6, default: 1)") + "\n" +
@@ -486,8 +486,8 @@ bool AppInit2()
 
     if (mapArgs.count("-mininput"))
     {
-        if (!ParseMoney(mapArgs["-mininput"], nMinimumInputValue))
-            return InitError(strprintf(_("Invalid amount for -mininput=<amount>: '%s'"), mapArgs["-mininput"].c_str()));
+       if (!ParseMoney(mapArgs["-mininput"], nMinimumInputValue))
+           return InitError(strprintf(_("Invalid amount for -mininput=<amount>: '%s'"), mapArgs["-mininput"].c_str()));
     }
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
