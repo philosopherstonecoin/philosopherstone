@@ -175,9 +175,8 @@ void OverviewPage::updatePlot(int count)
     if(!GetBoolArg("-chart", true)) { return; }
     if (GetTime() - lastUpdate < 180) { return; } // This is just so it doesn't redraw rapidly during syncing
 
-    if(fDebug) { printf("Plot: Getting Ready: pindexBest: %p\n", pindexBest); }
-    	
-		bool fProofOfStake = (nBestHeight > LAST_POW_BLOCK + 100);
+    bool fProofOfStake = (nBestHeight > LAST_POW_BLOCK + 100);
+	
     if (fProofOfStake)
         ui->diffplot->yAxis->setLabel("Stake Weight");
 		else
@@ -198,18 +197,9 @@ void OverviewPage::updatePlot(int count)
     vX.resize(numLookBack);
     vY.resize(numLookBack);
 
-    if(fDebug) {
-        if(height != pindex->nHeight) {
-            printf("Plot: Warning: nBestHeight and pindexBest->nHeight don't match: %d:%d:\n", height, pindex->nHeight);
-        }
-    }
-
-    if(fDebug) { printf("Plot: Reading blockchain\n"); }
-
     const CBlockIndex* itr = pindex;
     while(i >= 0 && itr != NULL)
     {
-        if(fDebug) { printf("Plot: Processing block: %d - pprev: %p\n", itr->nHeight, itr->pprev); }
         vX[i] = itr->nHeight;
         if (itr->nHeight < xStart) {
         	xStart = itr->nHeight;
@@ -221,8 +211,6 @@ void OverviewPage::updatePlot(int count)
         i--;
         x--;
     }
-
-    if(fDebug) { printf("Plot: Drawing plot\n"); }
 
     ui->diffplot->graph(0)->setData(vX, vY);
 
@@ -237,8 +225,6 @@ void OverviewPage::updatePlot(int count)
 
     ui->diffplot->replot();
 
-    if(fDebug) { printf("Plot: Done!\n"); }
-    	
     lastUpdate = GetTime();
 }
 

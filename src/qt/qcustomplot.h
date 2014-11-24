@@ -47,11 +47,8 @@
 #include <limits>
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #  include <qnumeric.h>
-#  include <QPrinter>
-#  include <QPrintEngine>
 #else
 #  include <QtNumeric>
-#  include <QtPrintSupport>
 #endif
 
 class QCPPainter;
@@ -1782,12 +1779,7 @@ public:
   QList<QCPAxis*> selectedAxes() const;
   QList<QCPLegend*> selectedLegends() const;
   Q_SLOT void deselectAll();
-  
-  bool savePdf(const QString &fileName, bool noCosmeticPen=false, int width=0, int height=0, const QString &pdfCreator="", const QString &pdfTitle="");
-  bool savePng(const QString &fileName, int width=0, int height=0, double scale=1.0, int quality=-1);
-  bool saveJpg(const QString &fileName, int width=0, int height=0, double scale=1.0, int quality=-1);
-  bool saveBmp(const QString &fileName, int width=0, int height=0, double scale=1.0);
-  bool saveRastered(const QString &fileName, int width, int height, double scale, const char *format, int quality=-1);
+
   QPixmap toPixmap(int width=0, int height=0, double scale=1.0);
   void toPainter(QCPPainter *painter, int width=0, int height=0);
   Q_SLOT void replot(QCustomPlot::RefreshPriority refreshPriority=QCustomPlot::rpHint);
