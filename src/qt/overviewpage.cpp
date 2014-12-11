@@ -129,24 +129,18 @@ OverviewPage::OverviewPage(QWidget *parent) :
     showOutOfSyncWarning(true);
     if(GetBoolArg("-chart", true))
     {
-        // setup Plot
         // create graph
         ui->diffplot->addGraph();
 
-        // Argh can't get the background to work.
-        //QPixmap background = QPixmap(":/images/splash_testnet");
-        //ui->diffplot->setBackground(background);
-        //ui->diffplot->setBackground(QBrush(QWidget::palette().color(this->backgroundRole())));
+        // labels:
+        ui->diffplot->xAxis->setLabel("Block");
+        ui->diffplot->yAxis->setLabel("NetWeight");
 
-        // give the axes some labels:
-        ui->diffplot->xAxis->setLabel("Blocks");
-        ui->diffplot->yAxis->setLabel("Difficulty");
-
-        // set the pens
+        // pens
         ui->diffplot->graph(0)->setPen(QPen(QColor(40, 110, 173)));
         ui->diffplot->graph(0)->setLineStyle(QCPGraph::lsLine);
 
-        // set axes label fonts:
+        // axes label fonts:
         QFont label = font();
         ui->diffplot->xAxis->setLabelFont(label);
         ui->diffplot->yAxis->setLabelFont(label);
@@ -171,9 +165,8 @@ OverviewPage::~OverviewPage()
 void OverviewPage::updatePlot(int count)
 {
     static int64_t lastUpdate = 0;
-    // Double Check to make sure we don't try to update the plot when it is disabled
     if(!GetBoolArg("-chart", true)) { return; }
-    if (GetTime() - lastUpdate < 180) { return; } // This is just so it doesn't redraw rapidly during syncing
+    if (GetTime() - lastUpdate < 180) { return; }
 
     bool fProofOfStake = (nBestHeight > LAST_POW_BLOCK + 100);
 	
@@ -182,7 +175,7 @@ void OverviewPage::updatePlot(int count)
 		else
         ui->diffplot->yAxis->setLabel("Difficulty");
 
-    int numLookBack = 1296;
+    int numLookBack = 3024;
     double diffMax = 0;
     const CBlockIndex* pindex = GetLastBlockIndex(pindexBest, fProofOfStake);
     int height = pindex->nHeight;

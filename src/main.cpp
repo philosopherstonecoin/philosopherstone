@@ -3071,14 +3071,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
         cPeerBlockCounts.input(pfrom->nStartingHeight);
 
-	// Be more aggressive with blockchain download. Send new getblocks() message after connection
-	// to new node if waited longer than MAX_TIME_SINCE_BEST_BLOCK.
-	int TimeSinceBestBlock = GetTime() - nTimeBestReceived;
-	if (TimeSinceBestBlock > MAX_TIME_SINCE_BEST_BLOCK) {
-		printf("INFO: Waiting %d sec which is too long. Sending GetBlocks(0)\n", TimeSinceBestBlock);
-		pfrom->PushGetBlocks(pindexBest, uint256(0));
-	}
-
         // ppcoin: ask for pending sync-checkpoint if any
         if (!IsInitialBlockDownload())
             Checkpoints::AskForPendingSyncCheckpoint(pfrom);

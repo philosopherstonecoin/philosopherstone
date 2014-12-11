@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/Philosopherstone-128.png</file>
+        <file alias="phsorange">res/icons/phsorange.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
         <file alias="quit">res/icons/quit.png</file>
         <file alias="send">res/icons/send.png</file>
@@ -24,6 +25,11 @@
         <file alias="add">res/icons/add.png</file>
         <file alias="bitcoin_testnet">res/icons/Philosopherstone-128.png</file>
         <file alias="toolbar_testnet">res/icons/Philosopherstone-16.png</file>
+        <file alias="tsu">res/icons/tsu.png</file>
+        <file alias="cryptsy">res/icons/cryptsy.png</file>
+        <file alias="stones">res/icons/stones.png</file>
+        <file alias="abe">res/icons/abe.png</file>
+        <file alias="qtlogo">res/icons/Qtlogo.png</file>
         <file alias="edit">res/icons/edit.png</file>
         <file alias="history">res/icons/history.png</file>
         <file alias="overview">res/icons/overview.png</file>
@@ -44,7 +50,7 @@
         <file alias="debugwindow">res/icons/debugwindow.png</file>
         <file alias="staking_off">res/icons/staking_off.png</file>
         <file alias="staking_on">res/icons/staking_on.png</file>
-        <file alias="walletlogo">res/images/walletlogo.png</file>
+        <file alias="splash">res/images/phsblue.png</file>
         <file alias="inspect">res/icons/inspect.png</file>
         <file alias="repair">res/icons/repair.png</file>
         <file alias="import">res/icons/import.png</file>
@@ -52,7 +58,6 @@
         <file alias="transaction_conflicted">res/icons/transaction_conflicted.png</file>
     </qresource>
     <qresource prefix="/images">
-        <file alias="about">res/images/about.jpg</file>
         <file alias="splash">res/images/phsblue.png</file>
     </qresource>
     <qresource prefix="/movies">

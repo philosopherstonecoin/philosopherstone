@@ -52,6 +52,7 @@
 #include <QDateTime>
 #include <QMovie>
 #include <QFileDialog>
+#include <QDesktopServices>
 #if QT_VERSION < 0x050000
 #include <QDesktopServices>
 #else
@@ -225,29 +226,45 @@ BitcoinGUI::~BitcoinGUI()
 void BitcoinGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
-
-    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
-    overviewAction->setStatusTip(tr("Show general overview of wallet"));
+		
+    actionTsu = new QAction(QIcon(":/icons/tsu"), tr(""), this);
+    actionTsu->setStatusTip(tr("Follow PHS on Tsu and get Paid!"));
+    actionTsu->setToolTip(actionTsu->statusTip());
+	
+    actionStones = new QAction(QIcon(":/icons/stones"), tr(""), this);
+    actionStones->setStatusTip(tr("PHS Homepage"));
+    actionStones->setToolTip(actionStones->statusTip());
+	
+    actionCryptsy = new QAction(QIcon(":/icons/cryptsy"), tr(""), this);
+    actionCryptsy->setStatusTip(tr("Buy and Sell PHS"));
+    actionCryptsy->setToolTip(actionCryptsy->statusTip());
+	
+    actionAbe = new QAction(QIcon(":/icons/abe"), tr(""), this);
+    actionAbe->setStatusTip(tr("PHS Explorer"));
+    actionAbe->setToolTip(actionAbe->statusTip());
+	
+    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Home"), this);
+    overviewAction->setStatusTip(tr("Wallet Overview"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send coins"), this);
+    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Philosopherstone address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive coins"), this);
+    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
     receiveCoinsAction->setStatusTip(tr("Show the list of addresses for receiving payments"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(receiveCoinsAction);
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
+    historyAction = new QAction(QIcon(":/icons/history"), tr("&History"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
@@ -276,10 +293,10 @@ void BitcoinGUI::createActions()
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/bitcoin"), tr("&About Philosopherstone"), this);
+    aboutAction = new QAction(QIcon(":/icons/phsorange"), tr("&About Philosopherstone"), this);
     aboutAction->setStatusTip(tr("Show information about Philosopherstone"));
     aboutAction->setMenuRole(QAction::AboutRole);
-    aboutQtAction = new QAction(QIcon(":/trolltech/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
+    aboutQtAction = new QAction(QIcon(":/icons/qtlogo"), tr("About &Qt"), this);
     aboutQtAction->setStatusTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
     optionsAction = new QAction(QIcon(":/icons/options"), tr("&Options..."), this);
@@ -316,6 +333,7 @@ void BitcoinGUI::createActions()
     exportAction = new QAction(QIcon(":/icons/export"), tr("&Export..."), this);
     exportAction->setStatusTip(tr("Export the data in the current tab to a file"));
     exportAction->setToolTip(exportAction->statusTip());
+	
     openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
     openRPCConsoleAction->setToolTip(openRPCConsoleAction->statusTip());
@@ -394,6 +412,15 @@ void BitcoinGUI::createToolBars()
     QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
     toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar2->addAction(exportAction);
+    toolbar2->addAction(actionTsu);
+    toolbar2->addAction(actionCryptsy);
+    toolbar2->addAction(actionStones);
+    toolbar2->addAction(actionAbe);
+
+    connect(actionTsu, SIGNAL(triggered()), this, SLOT(openTsu()));
+    connect(actionCryptsy, SIGNAL(triggered()), this, SLOT(openCryptsy()));
+    connect(actionStones, SIGNAL(triggered()), this, SLOT(openStones()));
+    connect(actionAbe, SIGNAL(triggered()), this, SLOT(openAbe()));
 }
 
 void BitcoinGUI::setClientModel(ClientModel *clientModel)
@@ -1312,4 +1339,20 @@ void BitcoinGUI::updateStakingIcon()
             labelStakingIcon->setToolTip(tr("Staking.\n Your weight is %1\n Network weight is %2\n You have 50\% chance of producing a stake within %3").arg(nWeight).arg(nNetworkWeight).arg(text));
           }
        }
+}
+
+void BitcoinGUI::openTsu() {
+    QDesktopServices::openUrl(QUrl("https://www.tsu.co/philosopherstone"));
+}
+
+void BitcoinGUI::openCryptsy() {
+    QDesktopServices::openUrl(QUrl("https://www.cryptsy.com/users/register?refid=8564"));
+}
+
+void BitcoinGUI::openStones() {
+    QDesktopServices::openUrl(QUrl("http://phstones.com/"));
+}
+
+void BitcoinGUI::openAbe() {
+    QDesktopServices::openUrl(QUrl("http://explorer.phstones.com/"));
 }
