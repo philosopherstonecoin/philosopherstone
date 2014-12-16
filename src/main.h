@@ -40,7 +40,7 @@ static const int64 MAX_MINT_PROOF_OF_WORK_LEGACY = 64 * COIN;
 static const int64 MAX_MINT_PROOF_OF_STAKE = 0.50 * MAX_MINT_PROOF_OF_WORK;	// 50% annual interest
 static const unsigned int RWD_SWITCH_TIME = 1376006400;		// August 9, 2013 00:00:00 GMT
 /** Split/Combine Threshold Max */
-static const int64 MAX_SPLIT_AMOUNT = 100 * COIN;
+static const int64 MAX_SPLIT_AMOUNT = 150 * COIN;
 static const int64 MAX_COMBINE_AMOUNT = MAX_SPLIT_AMOUNT;
 
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
