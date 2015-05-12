@@ -294,8 +294,8 @@ std::string HelpMessage()
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
-        "  -splitthreshold=<n>    " + _("Set stake split threshold within range (default 50),(max 150))") + "\n" +
-        "  -combinethreshold=<n>  " + _("Set stake combine threshold within range (default 50),(max 150))") + "\n" +
+        "  -splitthreshold=<n>    " + _("Set stake split threshold within range (default 65),(max 200") + "\n" +
+        "  -combinethreshold=<n>  " + _("Set stake combine threshold within range (default 65),(max 200") + "\n" +
         "  -salvagewallet         " + _("Attempt to recover private keys from a corrupt wallet.dat") + "\n" +
         "  -checkblocks=<n>       " + _("How many blocks to check at startup (default: 2500, 0 = all)") + "\n" +
         "  -checklevel=<n>        " + _("How thorough the block verification is (0-6, default: 1)") + "\n" +
