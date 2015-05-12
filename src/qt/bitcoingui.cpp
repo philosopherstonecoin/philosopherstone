@@ -85,6 +85,11 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     rpcConsole(0),
     prevBlocks(0)
 {
+
+  	QFile style(":/text/res/text/style.qss");
+	style.open(QFile::ReadOnly);
+	setStyleSheet(QString::fromUtf8(style.readAll()));
+
     resize(850, 550);
     setWindowTitle(tr("Philosopherstone") + " - " + tr("Wallet"));
 #ifndef Q_OS_MAC
@@ -128,10 +133,20 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     centralWidget = new QStackedWidget(this);
     centralWidget->addWidget(overviewPage);
+		overviewPage->setStyleSheet("background: transparent");
     centralWidget->addWidget(transactionsPage);
-    centralWidget->addWidget(addressBookPage);
+		sendCoinsPage->setStyleSheet("background-color: transparent;");
+		transactionsPage->setStyleSheet("background: #1b2f2f;");
+    centralWidget->addWidget(addressBookPage);	
+		sendCoinsPage->setStyleSheet("background-color: transparent;");
+		addressBookPage->setStyleSheet("background: #1b2f2f;");
     centralWidget->addWidget(receiveCoinsPage);
-    centralWidget->addWidget(sendCoinsPage);
+		sendCoinsPage->setStyleSheet("background-color: #1b2f2f;");
+		receiveCoinsPage->setStyleSheet("background: #1b2f2f;");
+    centralWidget->addWidget(sendCoinsPage);	
+		sendCoinsPage->setStyleSheet("background-color: #1b2f2f;");
+		sendCoinsPage->setStyleSheet("background: #1b2f2f;");
+	
     setCentralWidget(centralWidget);
 
     // Create status bar
@@ -293,7 +308,7 @@ void BitcoinGUI::createActions()
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/phsorange"), tr("&About Philosopherstone"), this);
+    aboutAction = new QAction(QIcon(":/icons/tx_mined"), tr("&About Philosopherstone"), this);
     aboutAction->setStatusTip(tr("Show information about Philosopherstone"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(QIcon(":/icons/qtlogo"), tr("About &Qt"), this);
@@ -1042,8 +1057,11 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setChecked(false);
         lockWalletAction->setChecked(false);
         changePassphraseAction->setEnabled(false);
+        changePassphraseAction->setVisible(false);
         unlockWalletAction->setEnabled(false);
+        unlockWalletAction->setVisible(false);
         lockWalletAction->setEnabled(false);
+        lockWalletAction->setVisible(false);
         encryptWalletAction->setEnabled(true);
         disconnect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         break;
@@ -1056,8 +1074,11 @@ void BitcoinGUI::setEncryptionStatus(int status)
         lockWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        encryptWalletAction->setVisible(false);
         unlockWalletAction->setEnabled(false);
+        unlockWalletAction->setVisible(false);
         lockWalletAction->setEnabled(true);
+        lockWalletAction->setVisible(true);
         disconnect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));
         break;
     case WalletModel::Locked:
@@ -1069,8 +1090,11 @@ void BitcoinGUI::setEncryptionStatus(int status)
         lockWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        encryptWalletAction->setVisible(false);
         unlockWalletAction->setEnabled(true);
+        unlockWalletAction->setVisible(true);
         lockWalletAction->setEnabled(false);
+        lockWalletAction->setVisible(false);
         connect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));
         break;
     }
