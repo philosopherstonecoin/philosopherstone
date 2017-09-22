@@ -26,11 +26,14 @@ class CRequestTracker;
 class CNode;
 
 static const int LAST_POW_BLOCK = 224000;
+static const int FIRST_HALVING_BLOCK = 1060000;
+static const int SECOND_HALVING_BLOCK = 1380000;
+
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
-static const unsigned int MAX_TX_COMMENT_LEN = 140; // Philosopherstone: 128 bytes + little extra
+static const unsigned int MAX_TX_COMMENT_LEN = 528; // Philosopherstone: 512 bytes + little extra
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64 MIN_TX_FEE = 1 * CENT;
 static const int64 MIN_RELAY_TX_FEE = 0.1 * CENT;
@@ -40,7 +43,7 @@ static const int64 MAX_MINT_PROOF_OF_WORK_LEGACY = 64 * COIN;
 static const int64 MAX_MINT_PROOF_OF_STAKE = 0.50 * MAX_MINT_PROOF_OF_WORK;	// 50% annual interest
 static const unsigned int RWD_SWITCH_TIME = 1376006400;		// August 9, 2013 00:00:00 GMT
 /** Split/Combine Threshold Max */
-static const int64 MAX_SPLIT_AMOUNT = 150 * COIN;
+static const int64 MAX_SPLIT_AMOUNT = 200 * COIN;
 static const int64 MAX_COMBINE_AMOUNT = MAX_SPLIT_AMOUNT;
 
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
@@ -106,6 +109,7 @@ void RegisterWallet(CWallet* pwalletIn);
 void UnregisterWallet(CWallet* pwalletIn);
 void SyncWithWallets(const CTransaction& tx, const CBlock* pblock = NULL, bool fUpdate = false, bool fConnect = true);
 bool ProcessBlock(CNode* pfrom, CBlock* pblock);
+bool ProcessBlockFast(CNode* pfrom, CBlock* pblock);
 bool CheckDiskSpace(uint64 nAdditionalBytes=0);
 FILE* OpenBlockFile(unsigned int nFile, unsigned int nBlockPos, const char* pszMode="rb");
 FILE* AppendBlockFile(unsigned int& nFileRet);
@@ -118,7 +122,7 @@ bool LoadExternalBlockFile(FILE* fileIn);
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake);
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash);
-int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime);
+int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight);
 unsigned int ComputeMinWork(unsigned int nBase, int64 nTime);
 int GetNumBlocksOfPeers();
 bool IsInitialBlockDownload();
@@ -1109,6 +1113,7 @@ public:
     bool AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos);
     bool CheckBlock(bool fCheckPOW=true, bool fCheckMerkleRoot=true) const;
     bool AcceptBlock();
+	bool AcceptBlockFast();
     bool GetCoinAge(uint64& nCoinAge) const; // ppcoin: calculate total coin age spent in block
     bool SignBlock(const CKeyStore& keystore);
     bool CheckBlockSignature() const;

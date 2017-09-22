@@ -227,21 +227,21 @@ void BitcoinGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 		
-    actionTsu = new QAction(QIcon(":/icons/tsu"), tr(""), this);
-    actionTsu->setStatusTip(tr("Follow PHS on Tsu and get Paid!"));
-    actionTsu->setToolTip(actionTsu->statusTip());
+    actionCommunity = new QAction(QIcon(":/icons/tsu"), tr(""), this);
+    actionCommunity->setStatusTip(tr("PHS Community Channel"));
+    actionCommunity->setToolTip(actionCommunity->statusTip());
 	
-    actionStones = new QAction(QIcon(":/icons/stones"), tr(""), this);
-    actionStones->setStatusTip(tr("PHS Homepage"));
-    actionStones->setToolTip(actionStones->statusTip());
+    actionHomepage = new QAction(QIcon(":/icons/stones"), tr(""), this);
+    actionHomepage->setStatusTip(tr("PHS Homepage"));
+    actionHomepage->setToolTip(actionHomepage->statusTip());
 	
-    actionCryptsy = new QAction(QIcon(":/icons/cryptsy"), tr(""), this);
-    actionCryptsy->setStatusTip(tr("Buy and Sell PHS"));
-    actionCryptsy->setToolTip(actionCryptsy->statusTip());
+    actionExchanger = new QAction(QIcon(":/icons/cryptsy"), tr(""), this);
+    actionExchanger->setStatusTip(tr("Buy and Sell PHS"));
+    actionExchanger->setToolTip(actionExchanger->statusTip());
 	
-    actionAbe = new QAction(QIcon(":/icons/abe"), tr(""), this);
-    actionAbe->setStatusTip(tr("PHS Explorer"));
-    actionAbe->setToolTip(actionAbe->statusTip());
+    actionExplorer = new QAction(QIcon(":/icons/abe"), tr(""), this);
+    actionExplorer->setStatusTip(tr("PHS Block Explorer"));
+    actionExplorer->setToolTip(actionExplorer->statusTip());
 	
     overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Home"), this);
     overviewAction->setStatusTip(tr("Wallet Overview"));
@@ -412,15 +412,15 @@ void BitcoinGUI::createToolBars()
     QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
     toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar2->addAction(exportAction);
-    toolbar2->addAction(actionTsu);
-    toolbar2->addAction(actionCryptsy);
-    toolbar2->addAction(actionStones);
-    toolbar2->addAction(actionAbe);
+    toolbar2->addAction(actionCommunity);
+    toolbar2->addAction(actionExchanger);
+    toolbar2->addAction(actionHomepage);
+    toolbar2->addAction(actionExplorer);
 
-    connect(actionTsu, SIGNAL(triggered()), this, SLOT(openTsu()));
-    connect(actionCryptsy, SIGNAL(triggered()), this, SLOT(openCryptsy()));
-    connect(actionStones, SIGNAL(triggered()), this, SLOT(openStones()));
-    connect(actionAbe, SIGNAL(triggered()), this, SLOT(openAbe()));
+    connect(actionCommunity, SIGNAL(triggered()), this, SLOT(openCommunity()));
+    connect(actionExchanger, SIGNAL(triggered()), this, SLOT(openExchanger()));
+    connect(actionHomepage, SIGNAL(triggered()), this, SLOT(openHomepage()));
+    connect(actionExplorer, SIGNAL(triggered()), this, SLOT(openExplorer()));
 }
 
 void BitcoinGUI::setClientModel(ClientModel *clientModel)
@@ -1341,18 +1341,18 @@ void BitcoinGUI::updateStakingIcon()
        }
 }
 
-void BitcoinGUI::openTsu() {
-    QDesktopServices::openUrl(QUrl("https://www.tsu.co/philosopherstone"));
+void BitcoinGUI::openCommunity() {
+	QDesktopServices::openUrl(QUrl("http://philosopherstones.org/channel"));
 }
 
-void BitcoinGUI::openCryptsy() {
-    QDesktopServices::openUrl(QUrl("https://www.cryptsy.com/users/register?refid=8564"));
+void BitcoinGUI::openExchanger() {
+	QDesktopServices::openUrl(QUrl("https://www.cryptopia.co.nz/Exchange/?market=PHS_BTC&referrer=vladk"));
 }
 
-void BitcoinGUI::openStones() {
-    QDesktopServices::openUrl(QUrl("http://phstones.com/"));
+void BitcoinGUI::openHomepage() {
+	QDesktopServices::openUrl(QUrl("http://philosopherstones.org"));
 }
 
-void BitcoinGUI::openAbe() {
-    QDesktopServices::openUrl(QUrl("http://explorer.phstones.com/"));
+void BitcoinGUI::openExplorer() {
+	QDesktopServices::openUrl(QUrl("http://philosopherstones.org/block"));
 }
