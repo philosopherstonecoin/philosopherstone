@@ -760,7 +760,12 @@ Value sendmany(const Array& params, bool fHelp)
         wtx.mapValue["comment"] = params[3].get_str();
 
 	if (params.size() > 4 && params[4].type() != null_type && !params[4].get_str().empty())
-        strTxComment = params[4].get_str();
+	{
+		strTxComment = params[4].get_str();
+		if (strTxComment.length() > MAX_TX_COMMENT_LEN)
+			strTxComment.resize(MAX_TX_COMMENT_LEN);
+	}
+        
 
     set<CBitcoinAddress> setAddress;
     vector<pair<CScript, int64> > vecSend;

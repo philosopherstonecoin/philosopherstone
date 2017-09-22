@@ -13,14 +13,10 @@ Stones will generate if held and not moved for more than ~8.8 Days.
    - Messaging
    - Proof of Stake only Switch after 10 month initial distribution (complete)
 
-<<<<<<< HEAD
-Forum
-https://bitcointalk.org/index.php?topic=830427.0
-=======
+Forum https://bitcointalk.org/index.php?topic=830427.0
 
 HomePage: http://philosopherstones.org/
 
 Community Channel: http://philosopherstones.org/channel
 
 Explorer: http://philosopherstones.org/block/
->>>>>>> b1d600c... Latest Leveldb, readme and build fixes.
