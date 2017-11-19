@@ -87,10 +87,10 @@ private:
     QAction *optionsAction;
     QAction *toggleHideAction;
     QAction *exportAction;
-    QAction *actionTsu;
-    QAction *actionCryptsy;
-    QAction *actionStones;
-    QAction *actionAbe;
+    QAction *actionCommunity;
+    QAction *actionExchanger;
+    QAction *actionHomepage;
+    QAction *actionExplorer;
     QAction *encryptWalletAction;
     QAction *backupWalletAction;
     QAction *dumpWalletAction;
@@ -213,10 +213,10 @@ private slots:
     void toggleHidden();
 	
 	void updateStakingIcon();
-    void openTsu();
-    void openCryptsy();
-    void openStones();
-    void openAbe();
+    void openCommunity();
+    void openExchanger();
+    void openHomepage();
+    void openExplorer();
 };
 
 #endif

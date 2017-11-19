@@ -1008,15 +1008,21 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 }
 
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
-int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime)
+int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight)
 {
     int64 nRewardCoinYear;
 
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
 
+	if (nHeight > SECOND_HALVING_BLOCK)
+		nRewardCoinYear /= 4;
+	else if (nHeight > FIRST_HALVING_BLOCK)
+		nRewardCoinYear /= 2;
+
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
 	if(nTime > RWD_SWITCH_TIME)
 		nSubsidy /= 64;
+
 
 	if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
@@ -1473,7 +1479,7 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs,
                 return error("ConnectInputs() : %s unable to get coin age for coinstake", GetHash().ToString().substr(0,10).c_str());
 
             int64 nStakeReward = GetValueOut() - nValueIn;
-            int64 nCalculatedStakeReward = GetProofOfStakeReward(nCoinAge, pindexBlock->nBits, nTime) - GetMinFee() + MIN_TX_FEE;
+            int64 nCalculatedStakeReward = GetProofOfStakeReward(nCoinAge, pindexBlock->nBits, nTime, pindexBlock->nHeight) - GetMinFee() + MIN_TX_FEE;
 
             if (nStakeReward > nCalculatedStakeReward)
                 return DoS(100, error("ConnectInputs() : coinstake pays too much(actual=%"PRI64d" vs calculated=%"PRI64d")", nStakeReward, nCalculatedStakeReward));
@@ -1908,9 +1914,9 @@ bool CBlock::SetBestChain(CTxDB& txdb, CBlockIndex* pindexNew)
     bnBestChainTrust = pindexNew->bnChainTrust;
     nTimeBestReceived = GetTime();
     nTransactionsUpdated++;
-    printf("SetBestChain: new best=%s  height=%d  trust=%s  date=%s\n",
-      hashBestChain.ToString().c_str(), nBestHeight, bnBestChainTrust.ToString().c_str(),
-      DateTimeStrFormat("%x %H:%M:%S", pindexBest->GetBlockTime()).c_str());
+    //printf("SetBestChain: new best=%s  height=%d  trust=%s  date=%s\n",
+    //  hashBestChain.ToString().c_str(), nBestHeight, bnBestChainTrust.ToString().c_str(),
+    //  DateTimeStrFormat("%x %H:%M:%S", pindexBest->GetBlockTime()).c_str());
 
     // Check the version of the last 100 blocks to see if we need to upgrade:
     if (!fIsInitialDownload)
@@ -2173,6 +2179,34 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
 }
 
 
+bool CBlock::AcceptBlockFast()
+{
+	// Check for duplicate
+	uint256 hash = GetHash();
+	if (mapBlockIndex.count(hash))
+		return error("AcceptBlock() : block already in mapBlockIndex");
+
+	// Get prev block index
+	map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashPrevBlock);
+	if (mi == mapBlockIndex.end())
+		return DoS(10, error("AcceptBlock() : prev block not found"));
+
+	// Write block to history file
+	if (!CheckDiskSpace(::GetSerializeSize(*this, SER_DISK, CLIENT_VERSION)))
+		return error("AcceptBlock() : out of disk space");
+	unsigned int nFile = -1;
+	unsigned int nBlockPos = 0;
+	if (!WriteToDisk(nFile, nBlockPos))
+		return error("AcceptBlock() : WriteToDisk failed");
+	if (!AddToBlockIndex(nFile, nBlockPos))
+		return error("AcceptBlock() : AddToBlockIndex failed");
+
+
+
+	return true;
+}
+
+
 bool CBlock::AcceptBlock()
 {
     // Check for duplicate
@@ -2261,6 +2295,55 @@ bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, uns
     return (nFound >= nRequired);
 }
 
+
+bool ProcessBlockFast(CNode* pfrom, CBlock* pblock)
+{
+	// Check for duplicate
+	uint256 hash = pblock->GetHash();
+	if (mapBlockIndex.count(hash))
+		return error("ProcessBlock() : already have block %d %s", mapBlockIndex[hash]->nHeight, hash.ToString().substr(0, 20).c_str());
+	if (mapOrphanBlocks.count(hash))
+		return error("ProcessBlock() : already have block (orphan) %s", hash.ToString().substr(0, 20).c_str());
+
+	// ppcoin: verify hash target and signature of coinstake tx
+	if (pblock->IsProofOfStake())
+	{
+		uint256 hashProofOfStake = 0, targetProofOfStake = 0;
+		if (!CheckProofOfStake(pblock->vtx[1], pblock->nBits, hashProofOfStake, targetProofOfStake))
+		{
+			printf("WARNING: ProcessBlock(): check proof-of-stake failed for block %s\n", hash.ToString().c_str());
+			return false; // do not error here as we expect this during initial block download
+		}
+		if (!mapProofOfStake.count(hash)) // add to mapProofOfStake
+			mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
+	}
+
+	// Store to disk
+	if (!pblock->AcceptBlockFast())
+		return error("ProcessBlock() : AcceptBlock FAILED");
+
+	// Recursively process any orphan blocks that depended on this one
+	vector<uint256> vWorkQueue;
+	vWorkQueue.push_back(hash);
+	for (unsigned int i = 0; i < vWorkQueue.size(); i++)
+	{
+		uint256 hashPrev = vWorkQueue[i];
+		for (multimap<uint256, CBlock*>::iterator mi = mapOrphanBlocksByPrev.lower_bound(hashPrev);
+			mi != mapOrphanBlocksByPrev.upper_bound(hashPrev);
+			++mi)
+		{
+			CBlock* pblockOrphan = (*mi).second;
+			if (pblockOrphan->AcceptBlockFast())
+				vWorkQueue.push_back(pblockOrphan->GetHash());
+			mapOrphanBlocks.erase(pblockOrphan->GetHash());
+			setStakeSeenOrphan.erase(pblockOrphan->GetProofOfStake());
+			delete pblockOrphan;
+		}
+		mapOrphanBlocksByPrev.erase(hashPrev);
+	}
+
+	return true;
+}
 
 bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 {
@@ -2798,7 +2881,7 @@ bool LoadExternalBlockFile(FILE* fileIn)
                 {
                     CBlock block;
                     blkdat >> block;
-                    if (ProcessBlock(NULL,&block))
+                    if (ProcessBlockFast(NULL,&block))
                     {
                         nLoaded++;
                         nPos += 4 + nSize;

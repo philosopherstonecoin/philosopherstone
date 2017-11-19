@@ -91,7 +91,7 @@
         <cursorShape>IBeamCursor</cursorShape>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright © 2009-2012 Bitcoin Developers&lt;br/&gt;Copyright © 2012 PPCoin Developers&lt;br/&gt;Copyright © 2013 NovaCoin Developers &lt;br/&gt;Copyright © 2013-2015 Philosopherstone Developers &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Donate&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;9fy8YX65LbUCeakWvXmNYrisrnK96ZGwtf&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;http://philosopherstones.org&quot;&gt;philosopherstones.org&lt;/a&gt;&lt;p&gt;Copyright © 2009-2012 Bitcoin Developers&lt;br/&gt;Copyright © 2012 PPCoin Developers&lt;br/&gt;Copyright © 2013 NovaCoin Developers &lt;br/&gt;Copyright © 2013-2017 Philosopherstone Developers &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Donate&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;9X47uUXJvKqv5UihrnchNzFodeRtYkYj1b&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="textFormat">
         <enum>Qt::RichText</enum>

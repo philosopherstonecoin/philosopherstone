@@ -190,7 +190,8 @@ void SendCoinsDialog::on_sendButton_clicked()
         break;
     case WalletModel::InvalidAmount:
         QMessageBox::warning(this, tr("Send Coins"),
-            tr("The amount to pay must be larger than 0."),
+            tr("The amount to pay must be equal or larger than %1").
+			arg(BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, MIN_TXOUT_AMOUNT)),
             QMessageBox::Ok, QMessageBox::Ok);
         break;
     case WalletModel::AmountExceedsBalance:
