@@ -710,7 +710,7 @@ bool AppInit2()
 
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
-
+        AddOneShot("165.227.242.199");
 
     // TODO: replace this by DNSseed
     // AddOneShot(string(""));
