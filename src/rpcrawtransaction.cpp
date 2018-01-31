@@ -48,6 +48,7 @@ void TxToJSON(const CTransaction& tx, const uint256 hashBlock, Object& entry)
     entry.push_back(Pair("version", tx.nVersion));
     entry.push_back(Pair("time", (boost::int64_t)tx.nTime));
     entry.push_back(Pair("locktime", (boost::int64_t)tx.nLockTime));
+	entry.push_back(Pair("tx-comment", tx.strTxComment));
     Array vin;
     BOOST_FOREACH(const CTxIn& txin, tx.vin)
     {
@@ -214,7 +215,7 @@ Value createrawtransaction(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 2)
         throw runtime_error(
-            "createrawtransaction [{\"txid\":txid,\"vout\":n},...] {address:amount,...}\n"
+            "createrawtransaction [{\"txid\":txid,\"vout\":n},...] {address:amount,...} [tx-comment]\n"
             "Create a transaction spending given inputs\n"
             "(array of objects containing transaction id and output number),\n"
             "sending to given address(es).\n"
@@ -250,7 +251,14 @@ Value createrawtransaction(const Array& params, bool fHelp)
         CTxIn in(COutPoint(uint256(txid), nOutput));
         rawTx.vin.push_back(in);
     }
-
+	std::string txcomment;
+	if (params.size() > 2 && params[2].type() != null_type && !params[2].get_str().empty())
+	{
+		txcomment = params[2].get_str();
+		if (txcomment.length() > MAX_TX_COMMENT_LEN)
+			txcomment.resize(MAX_TX_COMMENT_LEN);
+		rawTx.strTxComment = txcomment;
+	}
     set<CBitcoinAddress> setAddress;
     BOOST_FOREACH(const Pair& s, sendTo)
     {

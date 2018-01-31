@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/Philosopherstone-128.png</file>
-        <file alias="phsorange">res/icons/phsorange.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
         <file alias="quit">res/icons/quit.png</file>
         <file alias="send">res/icons/send.png</file>
@@ -125,5 +124,11 @@
         <file alias="vi_VN">locale/bitcoin_vi_VN.qm</file>
         <file alias="zh_CN">locale/bitcoin_zh_CN.qm</file>
         <file alias="zh_TW">locale/bitcoin_zh_TW.qm</file>
+    </qresource>
+    <qresource prefix="/text">
+        <file>res/text/style.qss</file>
+    </qresource>
+    <qresource prefix="/Background">
+        <file>res/images/11.png</file>
     </qresource>
 </RCC>

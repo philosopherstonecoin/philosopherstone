@@ -294,8 +294,8 @@ std::string HelpMessage()
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
-        "  -splitthreshold=<n>    " + _("Set stake split threshold within range (default 50),(max 150))") + "\n" +
-        "  -combinethreshold=<n>  " + _("Set stake combine threshold within range (default 50),(max 150))") + "\n" +
+        "  -splitthreshold=<n>    " + _("Set stake split threshold within range (default 50),(max 200))") + "\n" +
+        "  -combinethreshold=<n>  " + _("Set stake combine threshold within range (default 50),(max 200))") + "\n" +
         "  -salvagewallet         " + _("Attempt to recover private keys from a corrupt wallet.dat") + "\n" +
         "  -checkblocks=<n>       " + _("How many blocks to check at startup (default: 2500, 0 = all)") + "\n" +
         "  -checklevel=<n>        " + _("How thorough the block verification is (0-6, default: 1)") + "\n" +
@@ -493,7 +493,7 @@ bool AppInit2()
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
     // Sanity check
     if (!InitSanityCheck())
-        return InitError(_("Initialization sanity check failed. HoboNickels is shutting down."));
+        return InitError(_("Initialization sanity check failed. Philosopherstone is shutting down."));
 
     std::string strDataDir = GetDataDir().string();
 
@@ -710,7 +710,7 @@ bool AppInit2()
 
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
-        AddOneShot("54.148.124.35");
+
 
     // TODO: replace this by DNSseed
     // AddOneShot(string(""));
@@ -876,13 +876,13 @@ bool AppInit2()
 		exit(0);
     }
 
-    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
+    filesystem::path pathBootstrap = filesystem::initial_path() / "bootstrap.dat";
     if (filesystem::exists(pathBootstrap)) {
         uiInterface.InitMessage(_("Importing bootstrap blockchain data file."));
 
         FILE *file = fopen(pathBootstrap.string().c_str(), "rb");
         if (file) {
-            filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
+            filesystem::path pathBootstrapOld = filesystem::initial_path() / "bootstrap.dat.old";
             LoadExternalBlockFile(file);
             RenameOver(pathBootstrap, pathBootstrapOld);
         }

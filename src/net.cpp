@@ -1236,7 +1236,11 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"", ""},
+    { "main", "host1.philosopherstones.org" },
+	{ "node1", "node1.philosopherstones.org" },
+	{ "node2", "node2.philosopherstones.org" },
+	{ "node3", "node3.philosopherstones.org" },
+	{ "node4", "node4.philosopherstones.org" },
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1934,14 +1938,14 @@ void StartNode(void* parg)
     // Start threads
     //
 
-/*
+
     if (!GetBoolArg("-dnsseed", true))
         printf("DNS seeding disabled\n");
     else
         if (!NewThread(ThreadDNSAddressSeed, NULL))
             printf("Error: NewThread(ThreadDNSAddressSeed) failed\n");
-*/
 
+/*
     if (!GetBoolArg("-dnsseed", false))
         printf("DNS seeding disabled\n");
     if (GetBoolArg("-dnsseed", false))
@@ -1954,7 +1958,7 @@ void StartNode(void* parg)
     // Get addresses from IRC and advertise ours
     if (!NewThread(ThreadIRCSeed, NULL))
         printf("Error: NewThread(ThreadIRCSeed) failed\n");
-
+*/
     // Send and receive from sockets, accept connections
     if (!NewThread(ThreadSocketHandler, NULL))
         printf("Error: NewThread(ThreadSocketHandler) failed\n");

@@ -18,8 +18,8 @@ double GetPoSKernelPS2(const CBlockIndex* pindex);
 #include <QAbstractItemDelegate>
 #include <QPainter>
 
-#define DECORATION_SIZE 64
-#define NUM_ITEMS 3
+#define DECORATION_SIZE 40
+#define NUM_ITEMS 5
 
 class TxViewDelegate : public QAbstractItemDelegate
 {
@@ -39,7 +39,7 @@ public:
         QRect mainRect = option.rect;
         QRect decorationRect(mainRect.topLeft(), QSize(DECORATION_SIZE, DECORATION_SIZE));
         int xspace = DECORATION_SIZE + 8;
-        int ypad = 6;
+        int ypad = 3;
         int halfheight = (mainRect.height() - 2*ypad)/2;
         QRect amountRect(mainRect.left() + xspace, mainRect.top()+ypad, mainRect.width() - xspace, halfheight);
         QRect addressRect(mainRect.left() + xspace, mainRect.top()+ypad+halfheight, mainRect.width() - xspace, halfheight);
@@ -137,8 +137,23 @@ OverviewPage::OverviewPage(QWidget *parent) :
         ui->diffplot->yAxis->setLabel("NetWeight");
 
         // pens
-        ui->diffplot->graph(0)->setPen(QPen(QColor(40, 110, 173)));
+        ui->diffplot->graph(0)->setPen(QPen(Qt::white));
+        ui->diffplot->xAxis->setTickLabelColor(Qt::white);
+        ui->diffplot->xAxis->setBasePen(QPen(Qt::white));
+        ui->diffplot->xAxis->setLabelColor(Qt::white);
+        ui->diffplot->xAxis->setTickPen(QPen(Qt::white));
+        ui->diffplot->xAxis->setSubTickPen(QPen(Qt::white));
+        ui->diffplot->yAxis->setTickLabelColor(Qt::white);
+        ui->diffplot->yAxis->setBasePen(QPen(Qt::white));
+        ui->diffplot->yAxis->setLabelColor(Qt::white);
+        ui->diffplot->yAxis->setTickPen(QPen(Qt::white));
+        ui->diffplot->yAxis->setSubTickPen(QPen(Qt::white));
+        ui->diffplot->yAxis->grid()->setPen(QPen(QColor(Qt::white), 1, Qt::DotLine));		
+        ui->diffplot->xAxis->grid()->setPen(QPen(QColor(Qt::white), 1, Qt::DotLine));
         ui->diffplot->graph(0)->setLineStyle(QCPGraph::lsLine);
+
+        ui->diffplot->setBackground(Qt::transparent);
+        ui->diffplot->axisRect()->setBackground(Qt::transparent);
 
         // axes label fonts:
         QFont label = font();

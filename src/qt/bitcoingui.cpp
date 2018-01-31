@@ -85,6 +85,11 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     rpcConsole(0),
     prevBlocks(0)
 {
+
+  	QFile style(":/text/res/text/style.qss");
+	style.open(QFile::ReadOnly);
+	setStyleSheet(QString::fromUtf8(style.readAll()));
+
     resize(850, 550);
     setWindowTitle(tr("Philosopherstone") + " - " + tr("Wallet"));
 #ifndef Q_OS_MAC
@@ -128,10 +133,20 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
 
     centralWidget = new QStackedWidget(this);
     centralWidget->addWidget(overviewPage);
+		overviewPage->setStyleSheet("background: transparent");
     centralWidget->addWidget(transactionsPage);
-    centralWidget->addWidget(addressBookPage);
+		sendCoinsPage->setStyleSheet("background-color: transparent;");
+		transactionsPage->setStyleSheet("background: #1b2f2f;");
+    centralWidget->addWidget(addressBookPage);	
+		sendCoinsPage->setStyleSheet("background-color: transparent;");
+		addressBookPage->setStyleSheet("background: #1b2f2f;");
     centralWidget->addWidget(receiveCoinsPage);
-    centralWidget->addWidget(sendCoinsPage);
+		sendCoinsPage->setStyleSheet("background-color: #1b2f2f;");
+		receiveCoinsPage->setStyleSheet("background: #1b2f2f;");
+    centralWidget->addWidget(sendCoinsPage);	
+		sendCoinsPage->setStyleSheet("background-color: #1b2f2f;");
+		sendCoinsPage->setStyleSheet("background: #1b2f2f;");
+	
     setCentralWidget(centralWidget);
 
     // Create status bar
@@ -227,21 +242,21 @@ void BitcoinGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 		
-    actionTsu = new QAction(QIcon(":/icons/tsu"), tr(""), this);
-    actionTsu->setStatusTip(tr("Follow PHS on Tsu and get Paid!"));
-    actionTsu->setToolTip(actionTsu->statusTip());
+    actionCommunity = new QAction(QIcon(":/icons/tsu"), tr(""), this);
+    actionCommunity->setStatusTip(tr("PHS Community Channel"));
+    actionCommunity->setToolTip(actionCommunity->statusTip());
 	
-    actionStones = new QAction(QIcon(":/icons/stones"), tr(""), this);
-    actionStones->setStatusTip(tr("PHS Homepage"));
-    actionStones->setToolTip(actionStones->statusTip());
+    actionHomepage = new QAction(QIcon(":/icons/stones"), tr(""), this);
+    actionHomepage->setStatusTip(tr("PHS Homepage"));
+    actionHomepage->setToolTip(actionHomepage->statusTip());
 	
-    actionCryptsy = new QAction(QIcon(":/icons/cryptsy"), tr(""), this);
-    actionCryptsy->setStatusTip(tr("Buy and Sell PHS"));
-    actionCryptsy->setToolTip(actionCryptsy->statusTip());
+    actionExchanger = new QAction(QIcon(":/icons/cryptsy"), tr(""), this);
+    actionExchanger->setStatusTip(tr("Buy and Sell PHS"));
+    actionExchanger->setToolTip(actionExchanger->statusTip());
 	
-    actionAbe = new QAction(QIcon(":/icons/abe"), tr(""), this);
-    actionAbe->setStatusTip(tr("PHS Explorer"));
-    actionAbe->setToolTip(actionAbe->statusTip());
+    actionExplorer = new QAction(QIcon(":/icons/abe"), tr(""), this);
+    actionExplorer->setStatusTip(tr("PHS Block Explorer"));
+    actionExplorer->setToolTip(actionExplorer->statusTip());
 	
     overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Home"), this);
     overviewAction->setStatusTip(tr("Wallet Overview"));
@@ -293,7 +308,7 @@ void BitcoinGUI::createActions()
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/phsorange"), tr("&About Philosopherstone"), this);
+    aboutAction = new QAction(QIcon(":/icons/tx_mined"), tr("&About Philosopherstone"), this);
     aboutAction->setStatusTip(tr("Show information about Philosopherstone"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(QIcon(":/icons/qtlogo"), tr("About &Qt"), this);
@@ -412,15 +427,15 @@ void BitcoinGUI::createToolBars()
     QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
     toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar2->addAction(exportAction);
-    toolbar2->addAction(actionTsu);
-    toolbar2->addAction(actionCryptsy);
-    toolbar2->addAction(actionStones);
-    toolbar2->addAction(actionAbe);
+    toolbar2->addAction(actionCommunity);
+    toolbar2->addAction(actionExchanger);
+    toolbar2->addAction(actionHomepage);
+    toolbar2->addAction(actionExplorer);
 
-    connect(actionTsu, SIGNAL(triggered()), this, SLOT(openTsu()));
-    connect(actionCryptsy, SIGNAL(triggered()), this, SLOT(openCryptsy()));
-    connect(actionStones, SIGNAL(triggered()), this, SLOT(openStones()));
-    connect(actionAbe, SIGNAL(triggered()), this, SLOT(openAbe()));
+    connect(actionCommunity, SIGNAL(triggered()), this, SLOT(openCommunity()));
+    connect(actionExchanger, SIGNAL(triggered()), this, SLOT(openExchanger()));
+    connect(actionHomepage, SIGNAL(triggered()), this, SLOT(openHomepage()));
+    connect(actionExplorer, SIGNAL(triggered()), this, SLOT(openExplorer()));
 }
 
 void BitcoinGUI::setClientModel(ClientModel *clientModel)
@@ -1042,8 +1057,11 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setChecked(false);
         lockWalletAction->setChecked(false);
         changePassphraseAction->setEnabled(false);
+        changePassphraseAction->setVisible(false);
         unlockWalletAction->setEnabled(false);
+        unlockWalletAction->setVisible(false);
         lockWalletAction->setEnabled(false);
+        lockWalletAction->setVisible(false);
         encryptWalletAction->setEnabled(true);
         disconnect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         break;
@@ -1056,8 +1074,11 @@ void BitcoinGUI::setEncryptionStatus(int status)
         lockWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        encryptWalletAction->setVisible(false);
         unlockWalletAction->setEnabled(false);
+        unlockWalletAction->setVisible(false);
         lockWalletAction->setEnabled(true);
+        lockWalletAction->setVisible(true);
         disconnect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));
         break;
     case WalletModel::Locked:
@@ -1069,8 +1090,11 @@ void BitcoinGUI::setEncryptionStatus(int status)
         lockWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        encryptWalletAction->setVisible(false);
         unlockWalletAction->setEnabled(true);
+        unlockWalletAction->setVisible(true);
         lockWalletAction->setEnabled(false);
+        lockWalletAction->setVisible(false);
         connect(labelEncryptionIcon,SIGNAL(clicked()), this, SLOT(lockIconClicked()));
         break;
     }
@@ -1341,18 +1365,18 @@ void BitcoinGUI::updateStakingIcon()
        }
 }
 
-void BitcoinGUI::openTsu() {
-    QDesktopServices::openUrl(QUrl("https://www.tsu.co/philosopherstone"));
+void BitcoinGUI::openCommunity() {
+	QDesktopServices::openUrl(QUrl("http://philosopherstones.org/channel"));
 }
 
-void BitcoinGUI::openCryptsy() {
-    QDesktopServices::openUrl(QUrl("https://www.cryptsy.com/users/register?refid=8564"));
+void BitcoinGUI::openExchanger() {
+	QDesktopServices::openUrl(QUrl("https://www.cryptopia.co.nz/Exchange/?market=PHS_BTC&referrer=vladk"));
 }
 
-void BitcoinGUI::openStones() {
-    QDesktopServices::openUrl(QUrl("http://phstones.com/"));
+void BitcoinGUI::openHomepage() {
+	QDesktopServices::openUrl(QUrl("http://philosopherstones.org"));
 }
 
-void BitcoinGUI::openAbe() {
-    QDesktopServices::openUrl(QUrl("http://explorer.phstones.com/"));
+void BitcoinGUI::openExplorer() {
+	QDesktopServices::openUrl(QUrl("http://philosopherstones.org/block"));
 }
